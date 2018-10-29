@@ -1,26 +1,17 @@
 # typesmart
 
-## Project setup
-```
-npm install
-```
+Web app for practicing typing fast while learning about topics from Wikipedia, built with Vue.js
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Description
 
-### Compiles and minifies for production
-```
-npm run build
-```
+This is a small project with the main goal of improving my web development skills.
 
-### Run your tests
-```
-npm run test
-```
+Written in JS (Vue.js), HTML5 and CSS3 (Sass).
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Contributing
+
+All contributions are welcome, particularly feedback on code quality, bug reports, tips and ideas for improvement.
+
+## License
+
+All code dedicated to the world-wide public domain under a [Creative Commons Zero v1.0 Universal License](https://creativecommons.org/publicdomain/zero/1.0/)

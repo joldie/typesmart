@@ -13,6 +13,7 @@
       :text4=untypedLetters
       :text5=remainingText />
     <TypedText
+      v-bind:class="{ 'red-highlight': wrongInput }"
       v-on:key-pressed="keyPressed" />
   </div>
 </template>
@@ -21,7 +22,17 @@
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
 
-const exampleTopics = ["jaguar", "lion"];
+const exampleTopics = [
+  "jaguar",
+  "rock climbing",
+  "Russian revolution",
+  "Uganda",
+  "javascript",
+  "David Bowie",
+  "Homage to Catalonia",
+  "jupiter",
+  "ecology"
+];
 
 const callAPI = async function(searchText) {
   const URL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchText;
@@ -45,6 +56,11 @@ export default {
       remainingText: "",
       nextWord: ""
     };
+  },
+  computed: {
+    wrongInput: function() {
+      return this.incorrectLetters.length > 0 ? true : false;
+    }
   },
   methods: {
     getNewText: async function() {
@@ -74,7 +90,7 @@ export default {
     },
     saveNewText: function(originalText) {
       // Not a hard limit. Algorithm will stop adding sentences only after limit has first been exceeded.
-      const maxWords = 10;
+      const maxWords = 50;
       // Split text into sentences and save in array
       const sentences = this.numSentences(originalText);
       // Add sentences to text until word limit has been reached.

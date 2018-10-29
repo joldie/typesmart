@@ -19,3 +19,4 @@
 - [ ] User login, save results, etc
 - [ ] Post results to social media
 - [ ] Compete against other users / fixed speed / your old scores
+- [ ] Add "random topic" button

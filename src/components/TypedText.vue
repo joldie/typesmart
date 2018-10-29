@@ -18,12 +18,16 @@ export default {
 <style scoped lang="scss">
 .typed-text-wrapper {
   width: 100%;
-  max-width: 800px;
+  max-width: 600px;
   border: 1px solid black;
   margin: 5px;
+  padding: 5px;
   #typingInput {
     width: 100%;
     font-size: 20px;
   }
+}
+.red-highlight {
+  background: #d08383;
 }
 </style>
