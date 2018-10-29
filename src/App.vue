@@ -2,8 +2,9 @@
   <div id="app">
     <h1>Typing Test</h1>
     <form onSubmit="return false">
-      <input id="searchInput" type="text" placeholder='e.g. "jaguar"'>
-      <button v-on:click="getNewText">Get text</button>
+      <!-- Override default form submit behaviour to avoid CORS issue during API call -->
+      <input id="searchInput" type="text" required=true>
+      <button v-on:click="getNewText">Get new text</button>
     </form>
     <TargetText :text=targetText />
     <TypedText />
@@ -14,6 +15,15 @@
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
 
+const exampleTopics = ["jaguar", "lion"];
+
+const callAPI = async function(searchText) {
+  const URL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchText;
+  const response = await fetch(URL);
+  const jsonData = await response.json();
+  return jsonData;
+};
+
 export default {
   name: "app",
   components: {
@@ -22,22 +32,67 @@ export default {
   },
   data: function() {
     return {
-      targetText: "Placeholder text"
+      targetText: ""
     };
   },
   methods: {
     getNewText: async function() {
-      const URL =
-        "https://en.wikipedia.org/api/rest_v1/page/summary/" +
-        document.querySelector("#searchInput").value;
-      const response = await fetch(URL);
-      const jsonData = await response.json();
-      this.targetText = jsonData.extract;
-      // Possible return values:
-      // 1) Full abstract text
-      // 2) Redirect "... may refer to: ..."
-      // 3) Undefined
+      // Search Wikipedia for title given in search box
+      const searchText = document.querySelector("#searchInput").value;
+      if (searchText.length !== 0) {
+        // Perform API call to get summary text of topic
+        const returnObject = await callAPI(searchText);
+        if (returnObject.title === "Not found.") {
+          alert(
+            "'" +
+              searchText +
+              "' not found on Wikipedia.\nCheck your spelling or try another search term."
+          );
+        } else if (returnObject.type === "disambiguation") {
+          alert(
+            "'" +
+              searchText +
+              "' may refer to several topics.\nTry another search term or be more specific."
+          );
+        } else {
+          // If topic found, save extract (summary) text to target text box
+          this.saveText(returnObject.extract);
+        }
+      }
+    },
+    saveText: function(originalText) {
+      // Not a hard limit. Algorithm will stop adding sentences only after limit has first been exceeded.
+      const maxWords = 50;
+      // Split text into sentences and save in array
+      const sentences = this.numSentences(originalText);
+      // Add sentences to text until word limit has been reached.
+      let text = "";
+      let i = 0;
+      do {
+        text = text + sentences[i];
+        i++;
+      } while (this.numWords(text) < maxWords && i < sentences.length);
+      // Update target text display
+      this.targetText = text;
+    },
+    numSentences: function(text) {
+      // Note: regex fails with words that include periods, e.g. "Vue.js is great."
+      const sentenceRegex = /["',;-\s\w]+[.?!](\s|$)/g;
+      return text.match(sentenceRegex);
+    },
+    numWords: function(text) {
+      const wordRegex = /\w+/g;
+      return text.match(wordRegex).length;
     }
+  },
+  mounted: async function() {
+    // Get random topic from example list to display on page load
+    const exampleTopic =
+      exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
+    const returnObject = await callAPI(exampleTopic);
+    this.saveText(returnObject.extract);
+    document.querySelector("#searchInput").placeholder =
+      'e.g. "' + exampleTopic + '"';
   }
 };
 </script>
