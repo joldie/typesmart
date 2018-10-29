@@ -9,8 +9,7 @@ export default {
   name: "TypedText",
   methods: {
     keyPressed: function() {
-      const inputText = document.querySelector("#typingInput").value;
-      //console.log(inputText);
+      this.$emit("key-pressed", document.querySelector("#typingInput").value);
     }
   }
 };
