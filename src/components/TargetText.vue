@@ -1,6 +1,11 @@
 <template>
   <div class="target-text-wrapper">
-    {{text}}
+    <span class="green-highlight">{{text1}}</span>
+    <span class="green-highlight underline">{{text2}}</span>
+    <span class="red-highlight underline">{{text3}}</span>
+    <span class="underline">{{text4WithoutSpacesOneEnd}}</span>
+    <span>{{spacesOnEnd}}</span>
+    <span>{{text5}}</span>
   </div>
 </template>
 
@@ -8,7 +13,21 @@
 export default {
   name: "TargetText",
   props: {
-    text: String
+    text1: String,
+    text2: String,
+    text3: String,
+    text4: String,
+    text5: String
+  },
+  computed: {
+    text4WithoutSpacesOneEnd: function() {
+      return this.text4[this.text4.length - 1] === " "
+        ? this.text4.substring(0, this.text4.length - 1)
+        : this.text4;
+    },
+    spacesOnEnd: function() {
+      return this.text4[this.text4.length - 1] === " " ? " " : "";
+    }
   }
 };
 </script>
@@ -21,5 +40,15 @@ export default {
   margin: 5px;
   padding: 5px;
   font-size: 20px;
+}
+.green-highlight {
+  color: #99cc0f;
+}
+.red-highlight {
+  color: #983333;
+  background: #d08383;
+}
+.underline {
+  text-decoration: underline;
 }
 </style>
