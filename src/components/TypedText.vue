@@ -1,6 +1,11 @@
 <template>
   <div class="typed-text-wrapper">
-    <input id="typingInput" ref="input" type="text" placeholder="Type here" v-on:keyup="keyPressed" :disabled=inputDisabled>
+    <input
+      ref="input"
+      type="text"
+      placeholder="Type here"
+      v-on:keyup="keyPressed"
+      :disabled=!inputEnabled >
   </div>
 </template>
 
@@ -8,7 +13,7 @@
 export default {
   name: "TypedText",
   props: {
-    inputDisabled: Boolean
+    inputEnabled: Boolean
   },
   methods: {
     keyPressed: function() {
@@ -31,7 +36,7 @@ export default {
   border: 1px solid black;
   margin: 5px;
   padding: 5px;
-  #typingInput {
+  input {
     width: 100%;
     font-size: 20px;
   }

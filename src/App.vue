@@ -1,20 +1,14 @@
 <template>
   <div id="app">
     <h1>Typing Test</h1>
-    <form onSubmit="return false">
-      <!-- Override default form submit behaviour to avoid CORS issue during API call -->
-      <input id="searchInput" type="text" required=true>
-      <button v-on:click="getNewText">Get new text</button>
-    </form>
-    <div>
-      <button v-on:click="timerStartStop">
-        <font-awesome-icon :icon="timerRunning ? 'pause' : 'play'"></font-awesome-icon>
-        </button>
-      <button v-on:click="timerReset">
-        <font-awesome-icon icon="undo"></font-awesome-icon>
-        </button>
-      <span id="remainingTime"><font-awesome-icon icon="stopwatch"></font-awesome-icon> {{timeLeft}}</span>
-    </div>
+    <SearchForm
+      :placeholderText=searchPlaceholder
+      v-on:search-button-clicked="getNewText" />
+    <TimerControls
+      :timerRunning=timerRunning
+      :timeLeft=timeLeft
+      v-on:start-stop-clicked="timerStartStop"
+      v-on:reset-clicked="timerReset" />
     <TargetText
       :text1=completedText
       :text2=correctLetters
@@ -23,15 +17,19 @@
       :text5=remainingText />
     <TypedText
       ref="typedText"
-      :inputDisabled=disableTypingInput
+      :inputEnabled=timerRunning
       v-bind:class="{ 'red-highlight': wrongInput }"
       v-on:key-pressed="keyPressed" />
   </div>
 </template>
 
 <script>
+import SearchForm from "./components/SearchForm.vue";
+import TimerControls from "./components/TimerControls.vue";
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
+
+// Improves on setTimeout() function for timer which is known to drift over time
 const accurateInterval = require("./Accurate_Interval.js");
 
 const exampleTopics = [
@@ -56,11 +54,14 @@ const callAPI = async function(searchText) {
 export default {
   name: "app",
   components: {
+    SearchForm,
+    TimerControls,
     TargetText,
     TypedText
   },
   data: function() {
     return {
+      searchPlaceholder: "Hi",
       targetText: "",
       completedText: "",
       correctLetters: "",
@@ -70,8 +71,7 @@ export default {
       nextWord: "",
       secondsLeft: 120,
       intervalID: "",
-      timerRunning: false,
-      disableTypingInput: true
+      timerRunning: false
     };
   },
   computed: {
@@ -99,9 +99,8 @@ export default {
       this.nextWord = "";
       this.$refs.typedText.clear();
     },
-    getNewText: async function() {
+    getNewText: async function(searchText) {
       // Search Wikipedia for title given in search box
-      const searchText = document.querySelector("#searchInput").value;
       if (searchText.length !== 0) {
         // Perform API call to get summary text of topic
         const returnObject = await callAPI(searchText);
@@ -216,22 +215,19 @@ export default {
     },
     timerStartStop: function() {
       if (this.timerRunning) {
-        this.disableTypingInput = true;
         this.intervalID && this.intervalID.cancel();
         this.timerRunning = false;
       } else {
-        // Set focus to typingInput and enable
-        this.disableTypingInput = false;
+        // Start countdown
+        this.timerStartCountdown();
+        this.timerRunning = true;
         // Short timeout required to give DOM time to enable element before setting focus
         setTimeout(() => {
           this.$refs.typedText.focus();
         }, 10);
-        // Start countdown
-        this.timerStartCountdown();
       }
     },
     timerStartCountdown: function() {
-      this.timerRunning = true;
       this.intervalID = accurateInterval(() => {
         this.secondsLeft--;
         if (this.secondsLeft < 0) {
@@ -244,7 +240,6 @@ export default {
       this.intervalID && this.intervalID.cancel();
       this.timerRunning = false;
       this.secondsLeft = 120;
-      this.disableTypingInput = true;
       this.saveNewText(this.targetText);
       this.getNextWord();
     }
@@ -255,8 +250,7 @@ export default {
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
     const returnObject = await callAPI(exampleTopic);
     this.saveNewText(returnObject.extract);
-    document.querySelector("#searchInput").placeholder =
-      'e.g. "' + exampleTopic + '"';
+    this.searchPlaceholder = 'e.g. "' + exampleTopic + '"';
     this.getNextWord();
   }
 };
@@ -284,8 +278,5 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-form {
-  margin: 5px;
 }
 </style>
