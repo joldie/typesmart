@@ -6,6 +6,15 @@
       <input id="searchInput" type="text" required=true>
       <button v-on:click="getNewText">Get new text</button>
     </form>
+    <div>
+      <button v-on:click="timerStartStop">
+        <font-awesome-icon :icon="timerRunning ? 'pause' : 'play'"></font-awesome-icon>
+        </button>
+      <button v-on:click="timerReset">
+        <font-awesome-icon icon="undo"></font-awesome-icon>
+        </button>
+      <span id="remainingTime"><font-awesome-icon icon="stopwatch"></font-awesome-icon> {{timeLeft}}</span>
+    </div>
     <TargetText
       :text1=completedText
       :text2=correctLetters
@@ -13,6 +22,8 @@
       :text4=untypedLetters
       :text5=remainingText />
     <TypedText
+      ref="typedText"
+      :inputDisabled=disableTypingInput
       v-bind:class="{ 'red-highlight': wrongInput }"
       v-on:key-pressed="keyPressed" />
   </div>
@@ -21,6 +32,7 @@
 <script>
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
+const accurateInterval = require("./Accurate_Interval.js");
 
 const exampleTopics = [
   "jaguar",
@@ -49,20 +61,44 @@ export default {
   },
   data: function() {
     return {
+      targetText: "",
       completedText: "",
       correctLetters: "",
       incorrectLetters: "",
       untypedLetters: "",
       remainingText: "",
-      nextWord: ""
+      nextWord: "",
+      secondsLeft: 120,
+      intervalID: "",
+      timerRunning: false,
+      disableTypingInput: true
     };
   },
   computed: {
     wrongInput: function() {
       return this.incorrectLetters.length > 0 ? true : false;
+    },
+    timeLeft: function() {
+      let minutes = Math.floor(this.secondsLeft / 60);
+      let seconds = this.secondsLeft % 60;
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      return minutes + ":" + seconds;
     }
   },
   methods: {
+    clearAllText: function() {
+      this.completedText = "";
+      this.correctLetters = "";
+      this.incorrectLetters = "";
+      this.untypedLetters = "";
+      this.nextWord = "";
+      this.$refs.typedText.clear();
+    },
     getNewText: async function() {
       // Search Wikipedia for title given in search box
       const searchText = document.querySelector("#searchInput").value;
@@ -90,7 +126,7 @@ export default {
     },
     saveNewText: function(originalText) {
       // Not a hard limit. Algorithm will stop adding sentences only after limit has first been exceeded.
-      const maxWords = 50;
+      const maxWords = 10;
       // Split text into sentences and save in array
       const sentences = this.numSentences(originalText);
       // Add sentences to text until word limit has been reached.
@@ -101,10 +137,9 @@ export default {
         i++;
       } while (this.numWords(text) < maxWords && i < sentences.length);
       // Trim any whitespace from end and update target text display
+      this.clearAllText();
       this.remainingText = text.trim();
-      this.nextWord = "";
-      this.correctLetters = "";
-      this.incorrectLetters = "";
+      this.targetText = text.trim();
     },
     numSentences: function(text) {
       // Note: regex fails with words that include periods, e.g. "Vue.js is great."
@@ -137,10 +172,12 @@ export default {
     keyPressed: function(typedText) {
       if (typedText === this.nextWord) {
         this.completedText += typedText;
-        document.querySelector("#typingInput").value = "";
+        this.$refs.typedText.clear();
         if (this.remainingText.length === 0) {
-          alert("Done!");
-          // Do something here...
+          this.correctLetters = "";
+          this.untypedLetters = "";
+          this.timerStartStop();
+          alert("Done! Time required: " + (120 - this.secondsLeft) + "s");
         } else {
           this.getNextWord();
         }
@@ -176,6 +213,40 @@ export default {
           this.untypedLetters = "";
         }
       }
+    },
+    timerStartStop: function() {
+      if (this.timerRunning) {
+        this.disableTypingInput = true;
+        this.intervalID && this.intervalID.cancel();
+        this.timerRunning = false;
+      } else {
+        // Set focus to typingInput and enable
+        this.disableTypingInput = false;
+        // Short timeout required to give DOM time to enable element before setting focus
+        setTimeout(() => {
+          this.$refs.typedText.focus();
+        }, 10);
+        // Start countdown
+        this.timerStartCountdown();
+      }
+    },
+    timerStartCountdown: function() {
+      this.timerRunning = true;
+      this.intervalID = accurateInterval(() => {
+        this.secondsLeft--;
+        if (this.secondsLeft < 0) {
+          this.intervalID && this.intervalID.cancel();
+          this.timerRunning = false;
+        }
+      }, 1000);
+    },
+    timerReset: function() {
+      this.intervalID && this.intervalID.cancel();
+      this.timerRunning = false;
+      this.secondsLeft = 120;
+      this.disableTypingInput = true;
+      this.saveNewText(this.targetText);
+      this.getNextWord();
     }
   },
   mounted: async function() {

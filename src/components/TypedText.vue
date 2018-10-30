@@ -1,15 +1,24 @@
 <template>
   <div class="typed-text-wrapper">
-    <input id="typingInput" type="text" placeholder="Type here" v-on:keyup="keyPressed">
+    <input id="typingInput" ref="input" type="text" placeholder="Type here" v-on:keyup="keyPressed" :disabled=inputDisabled>
   </div>
 </template>
 
 <script>
 export default {
   name: "TypedText",
+  props: {
+    inputDisabled: Boolean
+  },
   methods: {
     keyPressed: function() {
-      this.$emit("key-pressed", document.querySelector("#typingInput").value);
+      this.$emit("key-pressed", this.$refs.input.value);
+    },
+    focus: function() {
+      this.$refs.input.focus();
+    },
+    clear: function() {
+      this.$refs.input.value = "";
     }
   }
 };
