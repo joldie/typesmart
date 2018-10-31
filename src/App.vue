@@ -2,8 +2,9 @@
   <div id="app">
     <h1>Typing Test</h1>
     <SearchForm
+      ref="searchForm"
       :placeholderText=searchPlaceholder
-      v-on:search-button-clicked="getNewText" />
+      v-on:save-new-text="saveNewText" />
     <Timer
       ref="timer"
       :running=timerRunning
@@ -53,7 +54,7 @@ export default {
   },
   data: function() {
     return {
-      searchPlaceholder: "Hi",
+      searchPlaceholder: "",
       targetText: "",
       completedText: "",
       correctLetters: "",
@@ -71,14 +72,6 @@ export default {
     }
   },
   methods: {
-    // API call to Wikipedia which returns a JSON object about the given topic
-    callAPI: async function(searchText) {
-      const URL =
-        "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchText;
-      const response = await fetch(URL);
-      const jsonData = await response.json();
-      return jsonData;
-    },
     // Reset text fields
     clearAllText: function() {
       this.completedText = "";
@@ -87,31 +80,6 @@ export default {
       this.untypedLetters = "";
       this.nextWord = "";
       this.$refs.typedText.clear();
-    },
-    // Retrieve and check text from Wikipedia
-    getNewText: async function(searchText) {
-      if (searchText.length !== 0) {
-        // Perform API call to get summary text of topic
-        const returnObject = await this.callAPI(searchText);
-        // Check returned JSON object
-        if (returnObject.title === "Not found.") {
-          alert(
-            "'" +
-              searchText +
-              "' not found on Wikipedia.\nCheck your spelling or try another search term."
-          );
-        } else if (returnObject.type === "disambiguation") {
-          alert(
-            "'" +
-              searchText +
-              "' may refer to several topics.\nTry another search term or be more specific."
-          );
-        } else {
-          // If topic found, save extract (summary) text to target text box
-          this.saveNewText(returnObject.extract);
-          this.getNextWord();
-        }
-      }
     },
     // Format and save text from API call
     saveNewText: function(originalText) {
@@ -130,6 +98,7 @@ export default {
       this.clearAllText();
       this.remainingText = text.trim();
       this.targetText = text.trim();
+      this.getNextWord();
     },
     // Returns count of number of sentences in a given text
     numSentences: function(text) {
@@ -213,7 +182,6 @@ export default {
     resetTest: function() {
       this.timerRunning = false;
       this.saveNewText(this.targetText);
-      this.getNextWord();
     },
     // Update timer state
     changeTimerState: function(bool) {
@@ -231,10 +199,9 @@ export default {
     // Get random topic from example list to display on page load
     const exampleTopic =
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
-    const returnObject = await this.callAPI(exampleTopic);
-    this.saveNewText(returnObject.extract);
     this.searchPlaceholder = 'e.g. "' + exampleTopic + '"';
-    this.getNextWord();
+    const returnObject = await this.$refs.searchForm.callAPI(exampleTopic);
+    this.saveNewText(returnObject.extract);
   }
 };
 </script>

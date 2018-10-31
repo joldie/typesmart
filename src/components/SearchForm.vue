@@ -17,9 +17,41 @@ export default {
     placeholderText: String
   },
   methods: {
-    // Pass button click event up to parent for action
+    // API call to Wikipedia which returns a JSON object about the given topic
+    callAPI: async function(searchText) {
+      const URL =
+        "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchText;
+      const response = await fetch(URL);
+      const jsonData = await response.json();
+      return jsonData;
+    },
+    // Retrieve and check text from Wikipedia
+    getNewText: async function(searchText) {
+      if (searchText.length !== 0) {
+        // Perform API call to get summary text of topic
+        const returnObject = await this.callAPI(searchText);
+        // Check returned JSON object
+        if (returnObject.title === "Not found.") {
+          alert(
+            "'" +
+              searchText +
+              "' not found on Wikipedia.\nCheck your spelling or try another search term."
+          );
+        } else if (returnObject.type === "disambiguation") {
+          alert(
+            "'" +
+              searchText +
+              "' may refer to several topics.\nTry another search term or be more specific."
+          );
+        } else {
+          // If topic found, pass extract (summary) to parent for processing
+          this.$emit("save-new-text", returnObject.extract);
+        }
+      }
+    },
+    // Search for new text based on user input
     buttonClicked: function() {
-      this.$emit("search-button-clicked", this.$refs.input.value);
+      this.getNewText(this.$refs.input.value);
     }
   }
 };
