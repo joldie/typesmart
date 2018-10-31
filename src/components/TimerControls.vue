@@ -18,9 +18,11 @@ export default {
     timeLeft: String
   },
   methods: {
+    // Pass button click event up to parent for action
     startStopClicked: function() {
       this.$emit("start-stop-clicked");
     },
+    // Pass button click event up to parent for action
     resetClicked: function() {
       this.$emit("reset-clicked");
     }

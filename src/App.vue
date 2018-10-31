@@ -24,14 +24,16 @@
 </template>
 
 <script>
+// Custom components
 import SearchForm from "./components/SearchForm.vue";
 import TimerControls from "./components/TimerControls.vue";
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
 
-// Improves on setTimeout() function for timer which is known to drift over time
+// Improves on setTimeout() function which is known to drift over time
 const accurateInterval = require("./Accurate_Interval.js");
 
+// Examples for showing a random topic on page load
 const exampleTopics = [
   "jaguar",
   "rock climbing",
@@ -43,13 +45,6 @@ const exampleTopics = [
   "jupiter",
   "ecology"
 ];
-
-const callAPI = async function(searchText) {
-  const URL = "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchText;
-  const response = await fetch(URL);
-  const jsonData = await response.json();
-  return jsonData;
-};
 
 export default {
   name: "app",
@@ -75,9 +70,11 @@ export default {
     };
   },
   computed: {
+    // Dictates whether red warnign colour is shown to user or not
     wrongInput: function() {
       return this.incorrectLetters.length > 0 ? true : false;
     },
+    // Format number of seconds into minutes:seconds (e.g. 90s -> "01:30")
     timeLeft: function() {
       let minutes = Math.floor(this.secondsLeft / 60);
       let seconds = this.secondsLeft % 60;
@@ -91,6 +88,15 @@ export default {
     }
   },
   methods: {
+    // API call to Wikipedia which returns a JSON object about the given topic
+    callAPI: async function(searchText) {
+      const URL =
+        "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchText;
+      const response = await fetch(URL);
+      const jsonData = await response.json();
+      return jsonData;
+    },
+    // Reset text fields
     clearAllText: function() {
       this.completedText = "";
       this.correctLetters = "";
@@ -99,11 +105,12 @@ export default {
       this.nextWord = "";
       this.$refs.typedText.clear();
     },
+    // Retrieve and check text from Wikipedia
     getNewText: async function(searchText) {
-      // Search Wikipedia for title given in search box
       if (searchText.length !== 0) {
         // Perform API call to get summary text of topic
-        const returnObject = await callAPI(searchText);
+        const returnObject = await this.callAPI(searchText);
+        // Check returned JSON object
         if (returnObject.title === "Not found.") {
           alert(
             "'" +
@@ -123,6 +130,7 @@ export default {
         }
       }
     },
+    // Format and save text from API call
     saveNewText: function(originalText) {
       // Not a hard limit. Algorithm will stop adding sentences only after limit has first been exceeded.
       const maxWords = 10;
@@ -140,15 +148,18 @@ export default {
       this.remainingText = text.trim();
       this.targetText = text.trim();
     },
+    // Returns count of number of sentences in a given text
     numSentences: function(text) {
       // Note: regex fails with words that include periods, e.g. "Vue.js is great."
       const sentenceRegex = /["',;-\s\w]+[.?!](\s|$)/g;
       return text.match(sentenceRegex);
     },
+    // Returns count of number of words in a given text
     numWords: function(text) {
       const wordRegex = /\w+/g;
       return text.match(wordRegex).length;
     },
+    // Get next word in text (denoted by space caharacter or end of text reached)
     getNextWord: function() {
       // Starting from start of remaining text, look for next space or end of paragraph
       let endPosition = 0;
@@ -168,6 +179,7 @@ export default {
       this.correctLetters = "";
       this.incorrectLetters = "";
     },
+    // Handle keyboard event in typing input field
     keyPressed: function(typedText) {
       if (typedText === this.nextWord) {
         this.completedText += typedText;
@@ -184,6 +196,7 @@ export default {
         this.checkTypedLetters(typedText);
       }
     },
+    // Check typed letter against expected letter in target text
     checkTypedLetters: function(typedText) {
       let letterPosition = 0;
       let numCorrect = 0;
@@ -213,6 +226,7 @@ export default {
         }
       }
     },
+    // Start or pause timer countdown, depending on current program state
     timerStartStop: function() {
       if (this.timerRunning) {
         this.intervalID && this.intervalID.cancel();
@@ -227,6 +241,7 @@ export default {
         }, 10);
       }
     },
+    // Start timer countdown
     timerStartCountdown: function() {
       this.intervalID = accurateInterval(() => {
         this.secondsLeft--;
@@ -236,6 +251,7 @@ export default {
         }
       }, 1000);
     },
+    // Reset timer to default settings and reset text fields
     timerReset: function() {
       this.intervalID && this.intervalID.cancel();
       this.timerRunning = false;
@@ -248,7 +264,7 @@ export default {
     // Get random topic from example list to display on page load
     const exampleTopic =
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
-    const returnObject = await callAPI(exampleTopic);
+    const returnObject = await this.callAPI(exampleTopic);
     this.saveNewText(returnObject.extract);
     this.searchPlaceholder = 'e.g. "' + exampleTopic + '"';
     this.getNextWord();

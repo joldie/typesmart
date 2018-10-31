@@ -17,6 +17,7 @@ export default {
     placeholderText: String
   },
   methods: {
+    // Pass button click event up to parent for action
     buttonClicked: function() {
       this.$emit("search-button-clicked", this.$refs.input.value);
     }

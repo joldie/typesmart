@@ -20,11 +20,13 @@ export default {
     text5: String
   },
   computed: {
+    // Remove space characters from text4 prop so that they are not styled with underline
     text4WithoutSpacesOneEnd: function() {
       return this.text4[this.text4.length - 1] === " "
         ? this.text4.substring(0, this.text4.length - 1)
         : this.text4;
     },
+    // Display space character from text4 prop separately (without styling)
     spacesOnEnd: function() {
       return this.text4[this.text4.length - 1] === " " ? " " : "";
     }
