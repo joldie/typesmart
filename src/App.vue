@@ -4,11 +4,11 @@
     <SearchForm
       :placeholderText=searchPlaceholder
       v-on:search-button-clicked="getNewText" />
-    <TimerControls
-      :timerRunning=timerRunning
-      :timeLeft=timeLeft
-      v-on:start-stop-clicked="timerStartStop"
-      v-on:reset-clicked="timerReset" />
+    <Timer
+      ref="timer"
+      :running=timerRunning
+      v-on:change-timer-state="changeTimerState"
+      v-on:reset-test="resetTest" />
     <TargetText
       :text1=completedText
       :text2=correctLetters
@@ -26,12 +26,9 @@
 <script>
 // Custom components
 import SearchForm from "./components/SearchForm.vue";
-import TimerControls from "./components/TimerControls.vue";
+import Timer from "./components/Timer.vue";
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
-
-// Improves on setTimeout() function which is known to drift over time
-const accurateInterval = require("./Accurate_Interval.js");
 
 // Examples for showing a random topic on page load
 const exampleTopics = [
@@ -50,7 +47,7 @@ export default {
   name: "app",
   components: {
     SearchForm,
-    TimerControls,
+    Timer,
     TargetText,
     TypedText
   },
@@ -64,8 +61,6 @@ export default {
       untypedLetters: "",
       remainingText: "",
       nextWord: "",
-      secondsLeft: 120,
-      intervalID: "",
       timerRunning: false
     };
   },
@@ -73,18 +68,6 @@ export default {
     // Dictates whether red warnign colour is shown to user or not
     wrongInput: function() {
       return this.incorrectLetters.length > 0 ? true : false;
-    },
-    // Format number of seconds into minutes:seconds (e.g. 90s -> "01:30")
-    timeLeft: function() {
-      let minutes = Math.floor(this.secondsLeft / 60);
-      let seconds = this.secondsLeft % 60;
-      if (seconds < 10) {
-        seconds = "0" + seconds;
-      }
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      return minutes + ":" + seconds;
     }
   },
   methods: {
@@ -187,8 +170,8 @@ export default {
         if (this.remainingText.length === 0) {
           this.correctLetters = "";
           this.untypedLetters = "";
-          this.timerStartStop();
-          alert("Done! Time required: " + (120 - this.secondsLeft) + "s");
+          this.$refs.timer.startStop();
+          alert("Done!");
         } else {
           this.getNextWord();
         }
@@ -226,38 +209,22 @@ export default {
         }
       }
     },
-    // Start or pause timer countdown, depending on current program state
-    timerStartStop: function() {
-      if (this.timerRunning) {
-        this.intervalID && this.intervalID.cancel();
-        this.timerRunning = false;
-      } else {
-        // Start countdown
-        this.timerStartCountdown();
-        this.timerRunning = true;
+    // Reset test fields
+    resetTest: function() {
+      this.timerRunning = false;
+      this.saveNewText(this.targetText);
+      this.getNextWord();
+    },
+    // Update timer state
+    changeTimerState: function(bool) {
+      this.timerRunning = bool;
+      // If timer starting, set focus to typing input field
+      if (bool) {
         // Short timeout required to give DOM time to enable element before setting focus
         setTimeout(() => {
           this.$refs.typedText.focus();
         }, 10);
       }
-    },
-    // Start timer countdown
-    timerStartCountdown: function() {
-      this.intervalID = accurateInterval(() => {
-        this.secondsLeft--;
-        if (this.secondsLeft < 0) {
-          this.intervalID && this.intervalID.cancel();
-          this.timerRunning = false;
-        }
-      }, 1000);
-    },
-    // Reset timer to default settings and reset text fields
-    timerReset: function() {
-      this.intervalID && this.intervalID.cancel();
-      this.timerRunning = false;
-      this.secondsLeft = 120;
-      this.saveNewText(this.targetText);
-      this.getNextWord();
     }
   },
   mounted: async function() {
