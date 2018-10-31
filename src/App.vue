@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <h1>Typing Test</h1>
+    <span>
+      {{typingSpeed}} wpm
+    </span>
     <SearchForm
       ref="searchForm"
       :placeholderText=searchPlaceholder
@@ -9,9 +12,10 @@
       ref="timer"
       :running=timerRunning
       v-on:change-timer-state="changeTimerState"
-      v-on:reset-test="resetTest" />
+      v-on:reset-test="resetTest"
+      v-on:one-second-elapsed="updateTypingSpeed" />
     <TargetText
-      :text1=completedText
+      :text1=completedWords
       :text2=correctLetters
       :text3=incorrectLetters
       :text4=untypedLetters
@@ -56,25 +60,30 @@ export default {
     return {
       searchPlaceholder: "",
       targetText: "",
-      completedText: "",
+      completedWords: "",
       correctLetters: "",
       incorrectLetters: "",
       untypedLetters: "",
       remainingText: "",
       nextWord: "",
+      typingSpeed: "-",
       timerRunning: false
     };
   },
   computed: {
-    // Dictates whether red warnign colour is shown to user or not
+    // Dictates whether red warning colour is shown to user or not
     wrongInput: function() {
       return this.incorrectLetters.length > 0 ? true : false;
+    },
+    // Returns number of correctly typed entries (characters and punctuation)
+    correctEntriesTyped: function() {
+      return this.completedWords.length + this.correctLetters.length;
     }
   },
   methods: {
     // Reset text fields
     clearAllText: function() {
-      this.completedText = "";
+      this.completedWords = "";
       this.correctLetters = "";
       this.incorrectLetters = "";
       this.untypedLetters = "";
@@ -86,7 +95,7 @@ export default {
       // Not a hard limit. Algorithm will stop adding sentences only after limit has first been exceeded.
       const maxWords = 10;
       // Split text into sentences and save in array
-      const sentences = this.numSentences(originalText);
+      const sentences = this.getAllSentences(originalText);
       // Add sentences to text until word limit has been reached.
       let text = "";
       let i = 0;
@@ -100,16 +109,16 @@ export default {
       this.targetText = text.trim();
       this.getNextWord();
     },
-    // Returns count of number of sentences in a given text
-    numSentences: function(text) {
+    // Returns array containing all sentences in a given text
+    getAllSentences: function(text) {
       // Note: regex fails with words that include periods, e.g. "Vue.js is great."
-      const sentenceRegex = /["',;-\s\w]+[.?!](\s|$)/g;
-      return text.match(sentenceRegex);
+      const regex = /["',;-\s\w]+[.?!](\s|$)/g;
+      return text.match(regex);
     },
     // Returns count of number of words in a given text
     numWords: function(text) {
-      const wordRegex = /\w+/g;
-      return text.match(wordRegex).length;
+      const regex = /\w+/g;
+      return text.match(regex) === null ? 0 : text.match(regex).length;
     },
     // Get next word in text (denoted by space caharacter or end of text reached)
     getNextWord: function() {
@@ -134,7 +143,7 @@ export default {
     // Handle keyboard event in typing input field
     keyPressed: function(typedText) {
       if (typedText === this.nextWord) {
-        this.completedText += typedText;
+        this.completedWords += typedText;
         this.$refs.typedText.clear();
         if (this.remainingText.length === 0) {
           this.correctLetters = "";
@@ -176,6 +185,25 @@ export default {
           this.incorrectLetters = this.nextWord.substring(numCorrect);
           this.untypedLetters = "";
         }
+      }
+    },
+    updateTypingSpeed: function(secondsElapsed) {
+      /*  Formula for calculating words per minute, WPM:
+            Gross WPM = (All typed entries / 5) / Time in minutes
+          i.e. a "word" is considered to be any 5 characters to account for
+          varying word lengths
+      
+      Note: - Errors are ignored, as they must be corrected in order to continue
+              to the next word, unlike in some tests. */
+
+      const correctEntriesTyped =
+        this.completedWords.length + this.correctLetters.length;
+      const speed = Math.floor(correctEntriesTyped / 5 / (secondsElapsed / 60));
+
+      if (!isNaN(speed) && isFinite(speed)) {
+        this.typingSpeed = speed;
+      } else {
+        this.typingSpeed = "-";
       }
     },
     // Reset test fields

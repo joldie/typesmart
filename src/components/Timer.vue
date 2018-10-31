@@ -47,20 +47,26 @@ export default {
     startStop: function() {
       if (this.running) {
         this.intervalID && this.intervalID.cancel();
-        this.changeState(false);
+        // Pass change state event up to parent for action
+        this.$emit("change-timer-state", false);
       } else {
         // Start countdown
         this.startCountdown();
-        this.changeState(true);
+        // Pass change state event up to parent for action
+        this.$emit("change-timer-state", true);
       }
     },
     // Start countdown
     startCountdown: function() {
       this.intervalID = accurateInterval(() => {
+        // Decrement timer
         this.secondsLeft--;
+        // Pass new time event, with current elapsed time, to parent for action
+        this.$emit("one-second-elapsed", 120 - this.secondsLeft);
         if (this.secondsLeft < 0) {
           this.intervalID && this.intervalID.cancel();
-          this.changeState(false);
+          // Pass change state event up to parent for action
+          this.$emit("change-timer-state", false);
         }
       }, 1000);
     },
@@ -70,10 +76,6 @@ export default {
       this.secondsLeft = 120;
       // Pass reset test event up to parent for action
       this.$emit("reset-test");
-    },
-    // Pass change state event up to parent for action
-    changeState: function(boolean) {
-      this.$emit("change-timer-state", boolean);
     }
   }
 };
