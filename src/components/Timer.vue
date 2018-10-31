@@ -15,7 +15,7 @@
 
 <script>
 // Improves on setTimeout() function which is known to drift over time
-const accurateInterval = require("../Accurate_Interval.js");
+const accurateInterval = require("../../libraries/Accurate_Interval.js");
 
 export default {
   name: "Timer",
