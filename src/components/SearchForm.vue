@@ -14,13 +14,13 @@
 export default {
   name: "SearchForm",
   props: {
-    placeholderText: String
+    placeholderText: String,
+    apiUrl: String
   },
   methods: {
     // API call to Wikipedia which returns a JSON object about the given topic
     callAPI: async function(searchText) {
-      const URL =
-        "https://en.wikipedia.org/api/rest_v1/page/summary/" + searchText;
+      const URL = this.apiUrl + searchText;
       const response = await fetch(URL);
       const jsonData = await response.json();
       return jsonData;

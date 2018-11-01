@@ -6,8 +6,12 @@
     </span>
     <SearchForm
       ref="searchForm"
+      :apiUrl=searchApiUrl
       :placeholderText=searchPlaceholder
       v-on:save-new-text="saveNewText" />
+    <Settings
+      v-on:new-language-selected="newLanguageSelected"
+      v-on:max-words-selected="maxWordsSelected" />
     <Timer
       ref="timer"
       :running=timerRunning
@@ -31,6 +35,7 @@
 <script>
 // Custom components
 import SearchForm from "./components/SearchForm.vue";
+import Settings from "./components/Settings.vue";
 import Timer from "./components/Timer.vue";
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
@@ -52,6 +57,7 @@ export default {
   name: "app",
   components: {
     SearchForm,
+    Settings,
     Timer,
     TargetText,
     TypedText
@@ -67,7 +73,9 @@ export default {
       remainingText: "",
       nextWord: "",
       typingSpeed: "-",
-      timerRunning: false
+      timerRunning: false,
+      searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/summary/",
+      maxWords: 10
     };
   },
   computed: {
@@ -92,8 +100,6 @@ export default {
     },
     // Format and save text from API call
     saveNewText: function(originalText) {
-      // Not a hard limit. Algorithm will stop adding sentences only after limit has first been exceeded.
-      const maxWords = 10;
       // Split text into sentences and save in array
       const sentences = this.getAllSentences(originalText);
       // Add sentences to text until word limit has been reached.
@@ -102,7 +108,7 @@ export default {
       do {
         text = text + sentences[i];
         i++;
-      } while (this.numWords(text) < maxWords && i < sentences.length);
+      } while (this.numWords(text) < this.maxWords && i < sentences.length);
       // Trim any whitespace from end and update target text display
       this.clearAllText();
       this.remainingText = text.trim();
@@ -221,6 +227,14 @@ export default {
           this.$refs.typedText.focus();
         }, 10);
       }
+    },
+    // Save selected language from Settings component
+    newLanguageSelected: function(URL) {
+      this.searchApiUrl = URL;
+    },
+    // Save selected word limit from Settings component
+    maxWordsSelected: function(wordLimit) {
+      this.maxWords = wordLimit;
     }
   },
   mounted: async function() {
