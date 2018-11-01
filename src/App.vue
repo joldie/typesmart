@@ -11,10 +11,12 @@
       v-on:save-new-text="saveNewText" />
     <Settings
       v-on:new-language-selected="newLanguageSelected"
+      v-on:time-limit-selected="timeLimitSelected"
       v-on:max-words-selected="maxWordsSelected" />
     <Timer
       ref="timer"
       :running=timerRunning
+      :timeLimit=timeLimit
       v-on:change-timer-state="changeTimerState"
       v-on:reset-test="resetTest"
       v-on:one-second-elapsed="updateTypingSpeed" />
@@ -75,7 +77,8 @@ export default {
       typingSpeed: "-",
       timerRunning: false,
       searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/summary/",
-      maxWords: 10
+      maxWords: 10,
+      timeLimit: 120
     };
   },
   computed: {
@@ -240,7 +243,11 @@ export default {
     },
     // Save selected word limit from Settings component
     maxWordsSelected: function(wordLimit) {
-      this.maxWords = wordLimit;
+      this.maxWords = Number(wordLimit);
+    },
+    // Save selected time limit from Settings component
+    timeLimitSelected: function(timeLimit) {
+      this.timeLimit = Number(timeLimit);
     }
   },
   mounted: async function() {

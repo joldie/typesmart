@@ -20,11 +20,12 @@ const accurateInterval = require("../../libraries/Accurate_Interval.js");
 export default {
   name: "Timer",
   props: {
-    running: Boolean
+    running: Boolean,
+    timeLimit: Number
   },
   data: function() {
     return {
-      secondsLeft: 120,
+      secondsLeft: 0,
       intervalID: ""
     };
   },
@@ -62,7 +63,7 @@ export default {
         // Decrement timer
         this.secondsLeft--;
         // Pass new time event, with current elapsed time, to parent for action
-        this.$emit("one-second-elapsed", 120 - this.secondsLeft);
+        this.$emit("one-second-elapsed", this.timeLimit - this.secondsLeft);
         if (this.secondsLeft < 0) {
           this.intervalID && this.intervalID.cancel();
           // Pass change state event up to parent for action
@@ -73,10 +74,13 @@ export default {
     // Reset timer to default settings and reset test fields
     reset: function() {
       this.intervalID && this.intervalID.cancel();
-      this.secondsLeft = 120;
+      this.secondsLeft = this.timeLimit;
       // Pass reset test event up to parent for action
       this.$emit("reset-test");
     }
+  },
+  mounted: function() {
+    this.secondsLeft = this.timeLimit;
   }
 };
 </script>
