@@ -46,7 +46,7 @@ const exampleTopics = [
   "rock climbing",
   "Russian revolution",
   "Uganda",
-  "javascript",
+  "Vue.js",
   "David Bowie",
   "Homage to Catalonia",
   "jupiter",
@@ -117,13 +117,19 @@ export default {
     },
     // Returns array containing all sentences in a given text
     getAllSentences: function(text) {
-      // Note: regex fails with words that include periods, e.g. "Vue.js is great."
-      const regex = /["',;-\s\w]+[.?!](\s|$)/g;
+      /* Regex explanation:
+          .+?     1 or more of any character (except new-line), ungreedy
+          [.?!]   Exactly 1 of these three characters: . ? !
+          (\s|$)  Exactly 1 space or end of text */
+      const regex = /.+?[.?!](\s|$)/g;
       return text.match(regex);
     },
     // Returns count of number of words in a given text
     numWords: function(text) {
-      const regex = /\w+/g;
+      /* Regex explanation:
+          (^|\s)  Exactly 1 space or start of text
+          [^ ]+   1 or more of any character, excluding space */
+      const regex = /(^|\s)[^ ]+/g;
       return text.match(regex) === null ? 0 : text.match(regex).length;
     },
     // Get next word in text (denoted by space caharacter or end of text reached)
