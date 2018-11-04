@@ -2,8 +2,8 @@
 
 ## High priority
 
-- [ ] Add settings view for changing word limit, search language, etc
 - [ ] Complete visual design
+- [ ] Make settings a modal component (popup)
 
 ## Medium priority
 
@@ -19,3 +19,4 @@
 - [ ] Compete against other users / fixed speed / your old scores
 - [ ] Add "random topic" button (see answer to https://stackoverflow.com/questions/33614492/wikipedia-api-get-random-pages)
 - [ ] Show race car (or similar) along track as visual cue for speed / timer countdown
+- [ ] Allow "ss" for ß, "ae" for ä, etc

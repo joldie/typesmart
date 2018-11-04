@@ -7,10 +7,11 @@ import {
   faStopwatch,
   faPlay,
   faPause,
-  faUndo
+  faUndo,
+  faCog
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-library.add(faStopwatch, faPlay, faPause, faUndo);
+library.add(faStopwatch, faPlay, faPause, faUndo, faCog);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.config.productionTip = false;

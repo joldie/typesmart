@@ -1,44 +1,51 @@
 <template>
   <div id="app">
-    <h1>Typing Test</h1>
-    <span>
-      {{typingSpeed}} wpm
-    </span>
-    <SearchForm
-      ref="searchForm"
-      :apiUrl=searchApiUrl
-      :placeholderText=searchPlaceholder
-      v-on:save-new-text="saveNewText" />
-    <Settings
+    <div class="app-wrapper">
+      <h1>Typing Test</h1>
+      <span>
+        {{typingSpeed}} wpm
+      </span>
+      <SearchForm
+        ref="searchForm"
+        :apiUrl=searchApiUrl
+        :placeholderText=searchPlaceholder
+        v-on:save-new-text="saveNewText" />
+      <button v-on:click="showSettings = true">
+        <font-awesome-icon icon="cog"></font-awesome-icon>
+      </button>
+      <Timer
+        ref="timer"
+        :running=timerRunning
+        :timeLimit=timeLimit
+        v-on:change-timer-state="changeTimerState"
+        v-on:timer-ended="timerEnded"
+        v-on:reset-test="resetTest"
+        v-on:one-second-elapsed="updateTypingSpeed" />
+      <TargetText
+        :text1=completedWords
+        :text2=correctLetters
+        :text3=incorrectLetters
+        :text4=untypedLetters
+        :text5=remainingText />
+      <TypedText
+        ref="typedText"
+        :inputEnabled=timerRunning
+        v-bind:class="{ 'red-highlight': wrongInput }"
+        v-on:key-pressed="keyPressed" />
+    </div>
+    <SettingsModal
+      v-if="showSettings"
+      v-on:close="showSettings = false"
       v-on:new-language-selected="newLanguageSelected"
       v-on:time-limit-selected="timeLimitSelected"
       v-on:max-words-selected="maxWordsSelected" />
-    <Timer
-      ref="timer"
-      :running=timerRunning
-      :timeLimit=timeLimit
-      v-on:change-timer-state="changeTimerState"
-      v-on:timer-ended="timerEnded"
-      v-on:reset-test="resetTest"
-      v-on:one-second-elapsed="updateTypingSpeed" />
-    <TargetText
-      :text1=completedWords
-      :text2=correctLetters
-      :text3=incorrectLetters
-      :text4=untypedLetters
-      :text5=remainingText />
-    <TypedText
-      ref="typedText"
-      :inputEnabled=timerRunning
-      v-bind:class="{ 'red-highlight': wrongInput }"
-      v-on:key-pressed="keyPressed" />
   </div>
 </template>
 
 <script>
 // Custom components
 import SearchForm from "./components/SearchForm.vue";
-import Settings from "./components/Settings.vue";
+import SettingsModal from "./components/SettingsModal.vue";
 import Timer from "./components/Timer.vue";
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
@@ -60,7 +67,7 @@ export default {
   name: "app",
   components: {
     SearchForm,
-    Settings,
+    SettingsModal,
     Timer,
     TargetText,
     TypedText
@@ -77,6 +84,7 @@ export default {
       nextWord: "",
       typingSpeed: "-",
       timerRunning: false,
+      showSettings: false,
       searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/summary/",
       maxWords: 10,
       timeLimit: 120
@@ -282,6 +290,10 @@ body {
   color: black;
 }
 #app {
+  width: 100%;
+  height: 100%;
+}
+.app-wrapper {
   width: 100%;
   height: 100%;
   display: flex;
