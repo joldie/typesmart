@@ -1,9 +1,9 @@
 <template>
   <div>
-    <button v-on:click="startStop">
+    <button @click="startStop">
       <font-awesome-icon :icon="running ? 'pause' : 'play'"></font-awesome-icon>
     </button>
-    <button v-on:click="reset">
+    <button @click="reset">
       <font-awesome-icon icon="undo"></font-awesome-icon>
     </button>
     <span v-bind:class="{ 'red-highlight': running && secondsLeft <= 10 }" >

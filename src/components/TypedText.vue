@@ -4,7 +4,7 @@
       ref="input"
       type="text"
       placeholder="Type here"
-      v-on:keyup="keyPressed"
+      @keyup="keyPressed"
       :disabled=!inputEnabled >
   </div>
 </template>

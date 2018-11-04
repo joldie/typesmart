@@ -6,7 +6,7 @@
       type="text"
       :placeholder=placeholderText
       required=true >
-    <button v-on:click="buttonClicked">Get new text</button>
+    <button @click="buttonClicked">Get new text</button>
   </form>
 </template>
 

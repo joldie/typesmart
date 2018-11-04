@@ -9,18 +9,18 @@
         ref="searchForm"
         :apiUrl=searchApiUrl
         :placeholderText=searchPlaceholder
-        v-on:save-new-text="saveNewText" />
-      <button v-on:click="showSettings = true">
+        @save-new-text="saveNewText" />
+      <button @click="showSettings = true">
         <font-awesome-icon icon="cog"></font-awesome-icon>
       </button>
       <Timer
         ref="timer"
         :running=timerRunning
         :timeLimit=timeLimit
-        v-on:change-timer-state="changeTimerState"
-        v-on:timer-ended="timerEnded"
-        v-on:reset-test="resetTest"
-        v-on:one-second-elapsed="updateTypingSpeed" />
+        @change-timer-state="changeTimerState"
+        @timer-ended="timerEnded"
+        @reset-test="resetTest"
+        @one-second-elapsed="updateTypingSpeed" />
       <TargetText
         :text1=completedWords
         :text2=correctLetters
@@ -31,14 +31,14 @@
         ref="typedText"
         :inputEnabled=timerRunning
         v-bind:class="{ 'red-highlight': wrongInput }"
-        v-on:key-pressed="keyPressed" />
+        @key-pressed="keyPressed" />
     </div>
     <SettingsModal
-      v-if="showSettings"
-      v-on:close="showSettings = false"
-      v-on:new-language-selected="newLanguageSelected"
-      v-on:time-limit-selected="timeLimitSelected"
-      v-on:max-words-selected="maxWordsSelected" />
+      v-show="showSettings"
+      @close="showSettings = false"
+      @new-language-selected="newLanguageSelected"
+      @time-limit-selected="timeLimitSelected"
+      @max-words-selected="maxWordsSelected" />
   </div>
 </template>
 
