@@ -18,6 +18,7 @@
       :running=timerRunning
       :timeLimit=timeLimit
       v-on:change-timer-state="changeTimerState"
+      v-on:timer-ended="timerEnded"
       v-on:reset-test="resetTest"
       v-on:one-second-elapsed="updateTypingSpeed" />
     <TargetText
@@ -236,6 +237,10 @@ export default {
           this.$refs.typedText.focus();
         }, 10);
       }
+    },
+    timerEnded: function() {
+      this.timerRunning = false;
+      alert("Time up, test finished!");
     },
     // Save selected language from Settings component
     newLanguageSelected: function(URL) {

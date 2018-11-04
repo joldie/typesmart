@@ -3,7 +3,7 @@
     <h3>Settings</h3>
     <label for="time-limit">Countdown time (s):</label>
     <input type="number" name="time-limit" v-model="selectedTimeLimit"
-      v-on:change="timeLimitSelected" min="60" max="600" step="10">
+      v-on:change="timeLimitSelected" min="30" max="600" step="10">
     <br/>
     <label for="max-words">Text word limit:</label>
     <input type="number" name="max-words" v-model="selectedWordLimit"

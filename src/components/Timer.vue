@@ -6,7 +6,7 @@
     <button v-on:click="reset">
       <font-awesome-icon icon="undo"></font-awesome-icon>
     </button>
-    <span>
+    <span v-bind:class="{ 'red-highlight': running && secondsLeft <= 10 }" >
       <font-awesome-icon icon="stopwatch"></font-awesome-icon>
       {{timeLeft}}
     </span>
@@ -66,8 +66,9 @@ export default {
         this.$emit("one-second-elapsed", this.timeLimit - this.secondsLeft);
         if (this.secondsLeft < 0) {
           this.intervalID && this.intervalID.cancel();
-          // Pass change state event up to parent for action
-          this.$emit("change-timer-state", false);
+          this.secondsLeft = 0;
+          // Pass timer state event up to parent for action
+          this.$emit("timer-ended", false);
         }
       }, 1000);
     },
@@ -81,9 +82,17 @@ export default {
   },
   mounted: function() {
     this.secondsLeft = this.timeLimit;
+  },
+  watch: {
+    timeLimit: function() {
+      this.reset();
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.red-highlight {
+  color: red;
+}
 </style>
