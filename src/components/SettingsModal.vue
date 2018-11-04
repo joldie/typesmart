@@ -4,14 +4,14 @@
       <h3>Settings</h3>
       <label for="time-limit">Countdown time (s):</label>
       <input type="number" name="time-limit" v-model="selectedTimeLimit"
-        v-on:change="timeLimitSelected" min="30" max="600" step="10">
+        @change="timeLimitSelected" min="30" max="600" step="10">
       <br/>
       <label for="max-words">Text word limit:</label>
       <input type="number" name="max-words" v-model="selectedWordLimit"
-        v-on:change="maxWordsSelected" min="10" max="100" step="10">
+        @change="maxWordsSelected" min="10" max="100" step="10">
       <br/>
       <label for="select-language">Text source:</label>
-      <select name="select-language" v-model="selectedApiUrl" v-on:change="languageSelected">
+      <select name="select-language" v-model="selectedApiUrl" @change="languageSelected">
         <option v-for="(lang, index) in availableLanguages" v-bind:value="lang.urlAPI" :key="index">
         {{ lang.name }}
         </option>
