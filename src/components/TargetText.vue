@@ -37,9 +37,8 @@ export default {
 <style scoped lang="scss">
 .target-text-wrapper {
   width: 100%;
-  max-width: 600px;
+  min-height: 150px;
   border: 1px solid black;
-  margin: 5px;
   padding: 5px;
   font-size: 20px;
 }

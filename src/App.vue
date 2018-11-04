@@ -1,22 +1,22 @@
 <template>
   <div id="app">
     <div class="app-wrapper">
-      <h1>Typing Test</h1>
-      <span>
-        {{typingSpeed}} wpm
-      </span>
+      <header>
+        <h1>TypeSmart</h1>
+        <h3>Practice typing while learning ...</h3>
+      </header>
       <SearchForm
-        ref="searchForm"
-        :apiUrl=searchApiUrl
-        :placeholderText=searchPlaceholder
-        @save-new-text="saveNewText" />
-      <button @click="showSettings = true">
-        <font-awesome-icon icon="cog"></font-awesome-icon>
-      </button>
-      <Timer
+      ref="searchForm"
+      :apiUrl=searchApiUrl
+      :placeholderText=searchPlaceholder
+      @save-new-text="saveNewText"
+      @show-settings="showSettings = true" />
+      <div class="timer-text-wrapper">
+        <Timer
         ref="timer"
         :running=timerRunning
         :timeLimit=timeLimit
+        :speed=typingSpeed
         @change-timer-state="changeTimerState"
         @timer-ended="timerEnded"
         @reset-test="resetTest"
@@ -32,6 +32,7 @@
         :inputEnabled=timerRunning
         v-bind:class="{ 'red-highlight': wrongInput }"
         @key-pressed="keyPressed" />
+      </div>
     </div>
     <SettingsModal
       v-show="showSettings"
@@ -285,6 +286,7 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
+  min-width: 320px;
   height: 100%;
   font-family: sans-serif;
   color: black;
@@ -296,9 +298,21 @@ body {
 .app-wrapper {
   width: 100%;
   height: 100%;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+}
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.timer-text-wrapper {
+  width: 100%;
+  max-width: 600px;
+  padding-bottom: 10px;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  grid-row-gap: 15px;
 }
 </style>

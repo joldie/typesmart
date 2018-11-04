@@ -1,12 +1,17 @@
 <template>
-  <div>
-    <button @click="startStop">
-      <font-awesome-icon :icon="running ? 'pause' : 'play'"></font-awesome-icon>
-    </button>
-    <button @click="reset">
-      <font-awesome-icon icon="undo"></font-awesome-icon>
-    </button>
-    <span v-bind:class="{ 'red-highlight': running && secondsLeft <= 10 }" >
+  <div class="timer-wrapper">
+    <div>
+      <button @click="startStop">
+        <font-awesome-icon :icon="running ? 'pause' : 'play'"></font-awesome-icon>
+      </button>
+      <button @click="reset">
+        <font-awesome-icon icon="undo"></font-awesome-icon>
+      </button>
+    </div>
+    <span class="speed-display">
+        {{speed}} wpm
+      </span>
+    <span class="time-display" v-bind:class="{ 'red-highlight': running && secondsLeft <= 10 }" >
       <font-awesome-icon icon="stopwatch"></font-awesome-icon>
       {{timeLeft}}
     </span>
@@ -21,7 +26,8 @@ export default {
   name: "Timer",
   props: {
     running: Boolean,
-    timeLimit: Number
+    timeLimit: Number,
+    speed: Number
   },
   data: function() {
     return {
@@ -92,6 +98,25 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.timer-wrapper {
+  width: 100%;
+  font-size: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.speed-display {
+  align-self: center;
+  justify-self: center;
+}
+.time-display {
+  align-self: center;
+  justify-self: right;
+}
+button {
+  height: 32px;
+  font-size: 16px;
+  margin-right: 5px;
+}
 .red-highlight {
   color: red;
 }

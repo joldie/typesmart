@@ -1,22 +1,31 @@
 <template>
   <div class="page-mask">
     <div class="settings-wrapper">
-      <h3>Settings</h3>
-      <label for="time-limit">Countdown time (s):</label>
-      <input type="number" name="time-limit" v-model="selectedTimeLimit"
-        @change="timeLimitSelected" min="30" max="600" step="10">
-      <br/>
-      <label for="max-words">Text word limit:</label>
-      <input type="number" name="max-words" v-model="selectedWordLimit"
-        @change="maxWordsSelected" min="10" max="100" step="10">
-      <br/>
-      <label for="select-language">Text source:</label>
-      <select name="select-language" v-model="selectedApiUrl" @change="languageSelected">
-        <option v-for="(lang, index) in availableLanguages" v-bind:value="lang.urlAPI" :key="index">
-        {{ lang.name }}
-        </option>
-      </select>
-      <button @click="$emit('close')">Close</button>
+      <div class="title-wrapper">
+        <h3>Settings</h3>
+        <button class="close-button" @click="$emit('close')">
+          <font-awesome-icon icon="times"></font-awesome-icon>
+        </button>
+      </div>
+      <div class="options-wrapper">
+        <label for="time-limit">Time limit (seconds):</label>
+        <br/>
+        <input type="number" name="time-limit" v-model="selectedTimeLimit"
+          @change="timeLimitSelected" min="30" max="600" step="10">
+        <br/>
+        <label for="max-words">Text word limit:</label>
+        <br/>
+        <input type="number" name="max-words" v-model="selectedWordLimit"
+          @change="maxWordsSelected" min="10" max="100" step="10">
+        <br/>
+        <label for="select-language">Text source:</label>
+        <br/>
+        <select name="select-language" v-model="selectedApiUrl" @change="languageSelected">
+          <option v-for="(lang, index) in availableLanguages" v-bind:value="lang.urlAPI" :key="index">
+          {{ lang.name }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -41,7 +50,7 @@ export default {
           urlAPI: "https://simple.wikipedia.org/api/rest_v1/page/summary/"
         },
         {
-          name: "Deutsch (German) Wikipedia",
+          name: "German Wikipedia",
           urlAPI: "https://de.wikipedia.org/api/rest_v1/page/summary/"
         }
       ]
@@ -79,6 +88,40 @@ export default {
   align-items: center;
 }
 .settings-wrapper {
+  width: 300px;
   background: white;
+  padding: 15px;
+  font-size: 16px;
+  .title-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    h3 {
+      margin-top: 0;
+    }
+    .close-button {
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: none;
+      font-size: 20px;
+      height: 24px;
+      &:hover {
+        color: grey;
+      }
+    }
+  }
+  .options-wrapper {
+    display: grid;
+    grid-template-rows: auto;
+    grid-row-gap: 5px;
+    select,
+    input {
+      justify-self: center;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  }
 }
 </style>

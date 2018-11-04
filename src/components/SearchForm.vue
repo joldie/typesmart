@@ -6,7 +6,14 @@
       type="text"
       :placeholder=placeholderText
       required=true >
-    <button @click="buttonClicked">Get new text</button>
+      <div class="wrapper-buttons">
+        <button class="search-button" @click="buttonClicked">
+          Search
+        </button>
+        <button @click.prevent="$emit('show-settings')">
+          <font-awesome-icon icon="cog"></font-awesome-icon>
+        </button>
+      </div>
   </form>
 </template>
 
@@ -59,6 +66,26 @@ export default {
 
 <style scoped lang="scss">
 form {
-  margin: 5px;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 50px;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-row-gap: 10px;
+  text-align: center;
+  input {
+    width: 100%;
+    font-size: 16px;
+    height: 32px;
+    text-align: center;
+  }
+  .search-button {
+    width: 100px;
+    margin-right: 10px;
+  }
+  button {
+    height: 32px;
+    font-size: 16px;
+  }
 }
 </style>

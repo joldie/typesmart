@@ -3,13 +3,13 @@
 ## High priority
 
 - [ ] Complete visual design
-- [ ] Make settings a modal component (popup)
 
 ## Medium priority
 
-- [ ] UX: Implement autocomplete for search (to avoid landing on disambiguation pages)
-- [ ] UX: Enable searching by different languages (incl. basic english)
-- [ ] UX: Remove special characters from text
+- [ ] Implement autocomplete for search (to avoid landing on disambiguation pages)
+- [ ] Enable searching by different languages (incl. basic english)
+- [ ] Display WPM speed as speedometer with changing colours (green to red)
+- [ ] Remove special characters from text
 
 ## Low priority
 
