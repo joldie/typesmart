@@ -10,7 +10,7 @@
         <button class="search-button" @click="buttonClicked">
           Search
         </button>
-        <button @click.prevent="$emit('show-settings')">
+        <button class="show-settings-button" @click.prevent="$emit('show-settings')">
           <font-awesome-icon icon="cog"></font-awesome-icon>
         </button>
       </div>
@@ -86,6 +86,25 @@ form {
   button {
     height: 32px;
     font-size: 16px;
+  }
+}
+@media screen and (max-width: 500px) {
+  form {
+    margin-bottom: 20px;
+    grid-template-columns: auto auto auto;
+    grid-column-gap: 5px;
+    input {
+      font-size: 14px;
+      width: 160px;
+    }
+    .search-button {
+      font-size: 14px;
+      width: 70px;
+      margin-right: 0;
+    }
+    .show-settings-button {
+      font-size: 14px;
+    }
   }
 }
 </style>

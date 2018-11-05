@@ -226,7 +226,7 @@ export default {
       const speed = Math.floor(correctEntriesTyped / 5 / (secondsElapsed / 60));
 
       if (!isNaN(speed) && isFinite(speed)) {
-        this.typingSpeed = speed;
+        this.typingSpeed = String(speed);
       } else {
         this.typingSpeed = "-";
       }
@@ -314,5 +314,19 @@ header {
   display: grid;
   grid-template-rows: auto auto auto;
   grid-row-gap: 15px;
+}
+@media screen and (max-width: 500px) {
+  header {
+    h1 {
+      font-size: 22px;
+    }
+    h3 {
+      font-size: 16px;
+    }
+    margin-bottom: 10px;
+  }
+  .timer-text-wrapper {
+    grid-row-gap: 10px;
+  }
 }
 </style>

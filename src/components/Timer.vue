@@ -27,7 +27,7 @@ export default {
   props: {
     running: Boolean,
     timeLimit: Number,
-    speed: Number
+    speed: String
   },
   data: function() {
     return {
@@ -119,5 +119,10 @@ button {
 }
 .red-highlight {
   color: red;
+}
+@media screen and (max-width: 500px) {
+  button {
+    font-size: 14px;
+  }
 }
 </style>
