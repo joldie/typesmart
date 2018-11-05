@@ -3,7 +3,17 @@
     <div class="app-wrapper">
       <header>
         <h1>TypeSmart</h1>
-        <h3>Practice typing while learning ...</h3>
+        <div class="subtitle-text">
+          <p>Practice typing while learning &zwnj;</p>
+          <vue-swimlane
+            class="emphasised-title-text"
+            :words=learnTopics
+            :transitionDelay=3000
+            :transitionDuration=1000
+            :scale=0.62
+            :circular=true>
+          </vue-swimlane>
+        </div>
       </header>
       <SearchForm
       ref="searchForm"
@@ -88,7 +98,8 @@ export default {
       showSettings: false,
       searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/summary/",
       maxWords: 10,
-      timeLimit: 120
+      timeLimit: 120,
+      learnTopics: ["history", "a language", "science", "geography"]
     };
   },
   computed: {
@@ -271,6 +282,16 @@ export default {
     this.searchPlaceholder = 'e.g. "' + exampleTopic + '"';
     const returnObject = await this.$refs.searchForm.callAPI(exampleTopic);
     this.saveNewText(returnObject.extract);
+
+    // Set initial text emphasised in page subtitle, then regularly change it
+    /*this.emphasisedTitleText = learnTopics[0];
+    setInterval(() => {
+      let nextIndex = learnTopics.indexOf(this.emphasisedTitleText) + 1;
+      if (nextIndex >= learnTopics.length) {
+        nextIndex = 0;
+      }
+      this.emphasisedTitleText = learnTopics[nextIndex];
+    }, 5000);*/
   }
 };
 </script>
@@ -306,6 +327,20 @@ body {
 header {
   text-align: center;
   margin-bottom: 30px;
+  .subtitle-text {
+    display: grid;
+    grid-template-columns: auto auto;
+    font-size: 18px;
+    font-weight: bold;
+    p {
+      margin: 0;
+    }
+    .emphasised-title-text li {
+      background: yellow;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
 }
 .timer-text-wrapper {
   width: 100%;
@@ -322,6 +357,9 @@ header {
     }
     h3 {
       font-size: 16px;
+    }
+    .subtitle-text {
+      grid-template-columns: auto;
     }
     margin-bottom: 10px;
   }

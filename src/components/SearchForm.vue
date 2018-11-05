@@ -95,7 +95,7 @@ form {
     grid-column-gap: 5px;
     input {
       font-size: 14px;
-      width: 160px;
+      width: 175px;
     }
     .search-button {
       font-size: 14px;
