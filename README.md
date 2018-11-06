@@ -14,4 +14,4 @@ All contributions are welcome, particularly feedback on code quality, bug report
 
 ## License
 
-All code dedicated to the world-wide public domain under a [Creative Commons Zero v1.0 Universal License](https://creativecommons.org/publicdomain/zero/1.0/)
+All code licensed under a [GNU General Public License v3.0 License](https://www.gnu.org/licenses/gpl.html)
