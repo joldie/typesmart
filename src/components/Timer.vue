@@ -10,7 +10,7 @@
     </div>
     <div class="speed-display">
       <div class="speed-colour-circle">
-        <div class="speed-circle-mask1">
+        <div class="speed-circle-mask1" v-bind:style="backgroundStyle">
         <div class="speed-circle-mask2">
           <span class="speed-text">
             {{speed}}
@@ -21,7 +21,7 @@
       </div>
     </div>
     <span class="time-display" v-bind:class="{ 'red-highlight': running && secondsLeft <= 10 }" >
-      <font-awesome-icon icon="stopwatch"></font-awesome-icon>
+      <font-awesome-icon icon="hourglass-half"></font-awesome-icon>
       {{timeLeft}}
     </span>
   </div>
@@ -56,6 +56,15 @@ export default {
         minutes = "0" + minutes;
       }
       return minutes + ":" + seconds;
+    },
+    backgroundStyle: function() {
+      let speedFraction = 0;
+      if (this.speed !== "-") {
+        speedFraction = Math.min(this.speed / 150, 1);
+      }
+      let angle = 180 * speedFraction;
+
+      return `background-image: linear-gradient(${angle}deg, transparent 50%, white 50%), linear-gradient(0deg, white 50%, transparent 50%);!important;`;
     }
   },
   methods: {
@@ -191,8 +200,8 @@ button {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-image: linear-gradient(126deg, transparent 50%, white 50%),
-    linear-gradient(0deg, white 50%, transparent 50%);
+  //background-image: linear-gradient(126deg, transparent 50%, white 50%),
+  //  linear-gradient(0deg, white 50%, transparent 50%);
 }
 
 .speed-circle-mask2 {
