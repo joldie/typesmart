@@ -155,10 +155,10 @@ button {
 
 .speed-colour-circle {
   position: relative;
-  top: 10px;
-  left: 10px;
-  width: 100px;
-  height: 100px;
+  top: 5px;
+  left: 5px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
@@ -208,24 +208,24 @@ button {
 
 .speed-circle-mask1 {
   position: relative;
-  right: 0px;
-  bottom: 0px;
-  width: 100px;
-  height: 100px;
+  left: 2px;
+  top: 2px;
+  width: 106px;
+  height: 106px;
   border-radius: 50%;
 }
 
 .speed-circle-mask2 {
   position: relative;
-  left: 10px;
-  top: 10px;
+  left: 13px;
+  top: 13px;
   width: 80px;
   height: 80px;
   background: white;
   border-radius: 50%;
   display: flex;
   justify-content: center;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+  //box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
 }
 .speed-text {
   position: relative;
