@@ -324,6 +324,7 @@ header {
     font-weight: bold;
     p {
       margin: 0;
+      padding-top: 2px;
     }
     .emphasised-title-text li {
       background: yellow;

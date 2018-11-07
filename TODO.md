@@ -2,7 +2,7 @@
 
 ## High priority
 
-- [ ] Complete visual design
+- [ ] Complete visual design, check on Firefox/Chrome
 
 ## Medium priority
 

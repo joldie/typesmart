@@ -68,7 +68,7 @@ export default {
 form {
   width: 100%;
   max-width: 300px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   display: grid;
   grid-template-rows: auto auto;
   grid-row-gap: 10px;

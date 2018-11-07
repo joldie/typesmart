@@ -1,6 +1,6 @@
 # TypeSmart
 
-Web app for practicing typing fast while learning about topics from Wikipedia, built with Vue.js
+Web app for practicing typing fast while learning about topics from Wikipedia.
 
 ## Description
 
