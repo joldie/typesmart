@@ -282,21 +282,13 @@ export default {
     this.searchPlaceholder = 'e.g. "' + exampleTopic + '"';
     const returnObject = await this.$refs.searchForm.callAPI(exampleTopic);
     this.saveNewText(returnObject.extract);
-
-    // Set initial text emphasised in page subtitle, then regularly change it
-    /*this.emphasisedTitleText = learnTopics[0];
-    setInterval(() => {
-      let nextIndex = learnTopics.indexOf(this.emphasisedTitleText) + 1;
-      if (nextIndex >= learnTopics.length) {
-        nextIndex = 0;
-      }
-      this.emphasisedTitleText = learnTopics[nextIndex];
-    }, 5000);*/
   }
 };
 </script>
 
 <style lang="scss">
+@import "../css/normalize.css";
+
 * {
   box-sizing: border-box;
   -moz-osx-font-smoothing: grayscale;
@@ -304,8 +296,6 @@ export default {
 }
 html,
 body {
-  margin: 0;
-  padding: 0;
   width: 100%;
   min-width: 320px;
   height: 100%;
