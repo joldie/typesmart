@@ -93,7 +93,7 @@ export default {
       untypedLetters: "",
       remainingText: "",
       nextWord: "",
-      typingSpeed: "-",
+      typingSpeed: 0,
       timerRunning: false,
       showSettings: false,
       searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/summary/",
@@ -237,15 +237,17 @@ export default {
       const speed = Math.floor(correctEntriesTyped / 5 / (secondsElapsed / 60));
 
       if (!isNaN(speed) && isFinite(speed)) {
-        this.typingSpeed = String(speed);
+        this.typingSpeed = speed;
       } else {
-        this.typingSpeed = "-";
+        this.typingSpeed = 0;
       }
     },
     // Reset test fields
     resetTest: function() {
       this.timerRunning = false;
       this.saveNewText(this.targetText);
+      this.typingSpeed = 0;
+      this.$refs.timer.focus();
     },
     // Update timer state
     changeTimerState: function(bool) {
@@ -282,6 +284,7 @@ export default {
     this.searchPlaceholder = 'e.g. "' + exampleTopic + '"';
     const returnObject = await this.$refs.searchForm.callAPI(exampleTopic);
     this.saveNewText(returnObject.extract);
+    this.$refs.timer.focus();
   }
 };
 </script>
@@ -327,7 +330,7 @@ header {
       padding-top: 2px;
     }
     .emphasised-title-text li {
-      background: yellow;
+      background: #feac00;
       padding-left: 5px;
       padding-right: 5px;
     }

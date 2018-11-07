@@ -1,7 +1,7 @@
 <template>
   <div class="timer-wrapper">
     <div class="timer-button-wrapper">
-      <button @click="startStop">
+      <button ref="startStopButton" @click="startStop">
         <font-awesome-icon :icon="running ? 'pause' : 'play'"></font-awesome-icon>
       </button>
       <button @click="reset">
@@ -36,7 +36,7 @@ export default {
   props: {
     running: Boolean,
     timeLimit: Number,
-    speed: String
+    speed: Number
   },
   data: function() {
     return {
@@ -58,11 +58,8 @@ export default {
       return minutes + ":" + seconds;
     },
     backgroundStyle: function() {
-      let speedFraction = 0;
-      if (this.speed !== "-") {
-        speedFraction = Math.min(this.speed / 150, 1);
-      }
-      let angle = 180 * speedFraction;
+      const speedFraction = Math.min(this.speed / 150, 1);
+      const angle = 180 * speedFraction;
 
       return `background-image: linear-gradient(${angle}deg, transparent 50%, white 50%), linear-gradient(0deg, white 50%, transparent 50%);!important;`;
     }
@@ -102,6 +99,10 @@ export default {
       this.secondsLeft = this.timeLimit;
       // Pass reset test event up to parent for action
       this.$emit("reset-test");
+    },
+    // Set window focus to start button for quick start
+    focus: function() {
+      this.$refs.startStopButton.focus();
     }
   },
   mounted: function() {
@@ -160,7 +161,7 @@ button {
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 .speed-colour-circle:before {
@@ -176,18 +177,30 @@ button {
   top: -50%;
   left: -50%;
   padding-top: 100%;
-  background-image: linear-gradient(330deg, transparent 50%, #50b517 50%),
-    linear-gradient(300deg, transparent 50%, green 50%),
+  background-image: linear-gradient(330deg, transparent 50%, red 50%),
+    linear-gradient(300deg, transparent 50%, red 50%),
     linear-gradient(270deg, transparent 50%, green 50%),
     linear-gradient(240deg, transparent 50%, green 50%),
+    linear-gradient(210deg, transparent 50%, green 50%),
+    linear-gradient(180deg, transparent 50%, green 50%),
+    linear-gradient(150deg, transparent 50%, #50b517 50%),
+    linear-gradient(120deg, transparent 50%, #9ed110 50%),
+    linear-gradient(90deg, transparent 50%, #ede604 50%),
+    linear-gradient(60deg, transparent 50%, #feac00 50%),
+    linear-gradient(30deg, transparent 50%, #ff8100 50%),
+    linear-gradient(0deg, transparent 50%, red 50%);
+  background-image: linear-gradient(330deg, transparent 50%, green 50%),
+    linear-gradient(300deg, transparent 50%, green 50%),
+    linear-gradient(270deg, transparent 50%, red 50%),
+    linear-gradient(240deg, transparent 50%, red 50%),
     linear-gradient(210deg, transparent 50%, red 50%),
     linear-gradient(180deg, transparent 50%, red 50%),
-    linear-gradient(150deg, transparent 50%, #ff5800 50%),
-    linear-gradient(120deg, transparent 50%, #ff8100 50%),
-    linear-gradient(90deg, transparent 50%, #feac00 50%),
-    linear-gradient(60deg, transparent 50%, #ffcc00 50%),
-    linear-gradient(30deg, transparent 50%, #ede604 50%),
-    linear-gradient(0deg, transparent 50%, #9ed110 50%);
+    linear-gradient(150deg, transparent 50%, #ff8100 50%),
+    linear-gradient(120deg, transparent 50%, #feac00 50%),
+    linear-gradient(90deg, transparent 50%, #ede604 50%),
+    linear-gradient(60deg, transparent 50%, #9ed110 50%),
+    linear-gradient(30deg, transparent 50%, #50b517 50%),
+    linear-gradient(0deg, transparent 50%, green 50%);
   background-clip: content-box, content-box, content-box, content-box,
     content-box, content-box, padding-box, padding-box, padding-box, padding-box,
     padding-box, padding-box;
@@ -200,8 +213,6 @@ button {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  //background-image: linear-gradient(126deg, transparent 50%, white 50%),
-  //  linear-gradient(0deg, white 50%, transparent 50%);
 }
 
 .speed-circle-mask2 {
@@ -214,7 +225,7 @@ button {
   border-radius: 50%;
   display: flex;
   justify-content: center;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
 }
 .speed-text {
   position: relative;
