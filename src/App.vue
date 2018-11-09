@@ -280,8 +280,7 @@ export default {
     const exampleTopic =
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
     this.$refs.searchForm.setPlaceholder('e.g. "' + exampleTopic + '"');
-    const returnObject = await this.$refs.searchForm.callAPI(exampleTopic);
-    this.saveNewText(returnObject.extract);
+    this.$refs.searchForm.getNewText(exampleTopic);
     this.$refs.timer.focus();
   }
 };
