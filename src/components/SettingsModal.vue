@@ -36,22 +36,22 @@ export default {
   data: function() {
     return {
       selectedTimeLimit: 120,
-      selectedWordLimit: 10,
+      selectedWordLimit: 20,
       // Default API is English Wikipedia
-      selectedApiUrl: "https://en.wikipedia.org/api/rest_v1/page/summary/",
+      selectedApiUrl: "https://en.wikipedia.org/api/rest_v1/page/",
       // Array of available languages for search text and associated URLs of APIs
       availableLanguages: [
         {
           name: "English Wikipedia",
-          urlAPI: "https://en.wikipedia.org/api/rest_v1/page/summary/"
+          urlAPI: "https://en.wikipedia.org/api/rest_v1/page/"
         },
         {
           name: "Simple English Wikipedia",
-          urlAPI: "https://simple.wikipedia.org/api/rest_v1/page/summary/"
+          urlAPI: "https://simple.wikipedia.org/api/rest_v1/page/"
         },
         {
           name: "German Wikipedia",
-          urlAPI: "https://de.wikipedia.org/api/rest_v1/page/summary/"
+          urlAPI: "https://de.wikipedia.org/api/rest_v1/page/"
         }
       ]
     };

@@ -177,18 +177,6 @@ button {
   top: -50%;
   left: -50%;
   padding-top: 100%;
-  background-image: linear-gradient(330deg, transparent 50%, red 50%),
-    linear-gradient(300deg, transparent 50%, red 50%),
-    linear-gradient(270deg, transparent 50%, green 50%),
-    linear-gradient(240deg, transparent 50%, green 50%),
-    linear-gradient(210deg, transparent 50%, green 50%),
-    linear-gradient(180deg, transparent 50%, green 50%),
-    linear-gradient(150deg, transparent 50%, #50b517 50%),
-    linear-gradient(120deg, transparent 50%, #9ed110 50%),
-    linear-gradient(90deg, transparent 50%, #ede604 50%),
-    linear-gradient(60deg, transparent 50%, #feac00 50%),
-    linear-gradient(30deg, transparent 50%, #ff8100 50%),
-    linear-gradient(0deg, transparent 50%, red 50%);
   background-image: linear-gradient(330deg, transparent 50%, green 50%),
     linear-gradient(300deg, transparent 50%, green 50%),
     linear-gradient(270deg, transparent 50%, red 50%),

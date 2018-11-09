@@ -4,11 +4,13 @@
     <input
       ref="input"
       type="text"
-      :placeholder=placeholderText
       required=true >
       <div class="wrapper-buttons">
-        <button class="search-button" @click="buttonClicked">
+        <button class="search-button" @click="searchClicked">
           Search
+        </button>
+        <button class="random-button" @click.prevent="randomClicked">
+          Random topic
         </button>
         <button class="show-settings-button" @click.prevent="$emit('show-settings')">
           <font-awesome-icon icon="cog"></font-awesome-icon>
@@ -21,13 +23,19 @@
 export default {
   name: "SearchForm",
   props: {
-    placeholderText: String,
     apiUrl: String
   },
   methods: {
     // API call to Wikipedia which returns a JSON object about the given topic
     callAPI: async function(searchText) {
-      const URL = this.apiUrl + searchText;
+      let URL;
+      if (searchText === "random") {
+        // Get random topic
+        URL = this.apiUrl + "random/summary";
+      } else {
+        // Get a specific topic with title = searchText
+        URL = this.apiUrl + "summary/" + searchText;
+      }
       const response = await fetch(URL);
       const jsonData = await response.json();
       return jsonData;
@@ -53,12 +61,24 @@ export default {
         } else {
           // If topic found, pass extract (summary) to parent for processing
           this.$emit("save-new-text", returnObject.extract);
+          if (searchText === "random") {
+            // Update search input placeholder with name of random topic
+            this.setPlaceholder('e.g. "' + returnObject.title + '"');
+          }
         }
       }
     },
     // Search for new text based on user input
-    buttonClicked: function() {
+    searchClicked: function() {
       this.getNewText(this.$refs.input.value);
+    },
+    // Get text from a random topic
+    randomClicked: function() {
+      this.getNewText("random");
+    },
+    // Set placeholder text of input field
+    setPlaceholder: function(text) {
+      this.$refs.input.placeholder = text;
     }
   }
 };

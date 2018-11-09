@@ -18,7 +18,6 @@
       <SearchForm
       ref="searchForm"
       :apiUrl=searchApiUrl
-      :placeholderText=searchPlaceholder
       @save-new-text="saveNewText"
       @show-settings="showSettings = true" />
       <div class="timer-text-wrapper">
@@ -85,7 +84,6 @@ export default {
   },
   data: function() {
     return {
-      searchPlaceholder: "",
       targetText: "",
       completedWords: "",
       correctLetters: "",
@@ -96,8 +94,8 @@ export default {
       typingSpeed: 0,
       timerRunning: false,
       showSettings: false,
-      searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/summary/",
-      maxWords: 10,
+      searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/",
+      maxWords: 20,
       timeLimit: 120,
       learnTopics: ["history", "a language", "science", "geography"]
     };
@@ -281,7 +279,7 @@ export default {
     // Get random topic from example list to display on page load
     const exampleTopic =
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
-    this.searchPlaceholder = 'e.g. "' + exampleTopic + '"';
+    this.$refs.searchForm.setPlaceholder('e.g. "' + exampleTopic + '"');
     const returnObject = await this.$refs.searchForm.callAPI(exampleTopic);
     this.saveNewText(returnObject.extract);
     this.$refs.timer.focus();
