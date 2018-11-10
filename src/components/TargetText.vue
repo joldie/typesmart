@@ -41,6 +41,7 @@ export default {
   border: 1px solid black;
   padding: 5px;
   font-size: 20px;
+  text-align: justify;
 }
 .green-highlight {
   color: #99cc0f;

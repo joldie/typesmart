@@ -1,17 +1,21 @@
 <template>
   <div class="search-wrapper">
     <!-- Override default form submit behaviour to avoid CORS issue during API call -->
-    <form onSubmit="return false">  
-      <input
+    <form onSubmit="return false">
+      <p class="search-label">Search for a topic:</p>
+      <div class="wrapper-search-input">
+        <input
         ref="input"
         type="text"
         required=true />
-      <div class="wrapper-buttons">
         <button class="search-button" @click="searchClicked">
-          Search
+          <font-awesome-icon icon="search"></font-awesome-icon>
         </button>
+      </div>
+      <div class="wrapper-other-buttons">
         <button class="random-button" @click.prevent="randomClicked">
-          Random topic
+          <font-awesome-icon icon="random"></font-awesome-icon>
+          <span class="button-text"> Random</span>
         </button>
         <button class="show-settings-button" @click.prevent="$emit('show-settings')">
           <font-awesome-icon icon="cog"></font-awesome-icon>
@@ -107,29 +111,32 @@ export default {
   margin-bottom: 30px;
   form {
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
     text-align: center;
-    input {
-      width: 100%;
+    button {
       height: 32px;
-      margin-bottom: 5px;
       font-size: 16px;
-      text-align: center;
     }
-    .wrapper-buttons {
+    .search-label {
+      text-align: left;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 5px;
+      margin-bottom: 10px;
+    }
+    .wrapper-search-input {
+      display: flex;
+      input {
+        height: 32px;
+        margin-bottom: 5px;
+        margin-right: 5px;
+        font-size: 16px;
+        text-align: center;
+      }
+    }
+    .wrapper-other-buttons {
       display: flex;
       justify-content: space-between;
-      button {
-        height: 32px;
-        font-size: 16px;
-      }
-      .search-button {
-        width: 100px;
-      }
-      button {
-        height: 32px;
-        //font-size: 16px;
-      }
     }
   }
   .thumbnail-wrapper {
@@ -147,21 +154,29 @@ export default {
 
 @media screen and (max-width: 500px) {
   .search-wrapper {
-    width: 100%;
-    margin-bottom: 20px;
-    grid-template-columns: auto;
-    justify-items: center;
+    width: 300px;
+    margin-bottom: 15px;
+    .search-label {
+      display: none;
+    }
     form {
-      grid-template-columns: auto auto auto;
-      grid-column-gap: 5px;
-      input {
-        font-size: 14px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: auto auto;
+      .wrapper-search-input {
+        input {
+          width: 180px;
+          font-size: 14px;
+          margin: 0;
+        }
       }
-      .search-button {
+      button {
         font-size: 14px;
+        padding-left: 4px;
+        padding-right: 4px;
       }
-      .show-settings-button {
-        font-size: 14px;
+      .button-text {
+        display: none;
       }
     }
     .thumbnail-wrapper {

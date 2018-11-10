@@ -136,6 +136,8 @@ export default {
       this.remainingText = text.trim();
       this.targetText = text.trim();
       this.getNextWord();
+      // Set focus to start/stop button for quick test start
+      this.$refs.timer.focus();
     },
     // Returns array containing all sentences in a given text
     getAllSentences: function(text) {
@@ -337,6 +339,7 @@ header {
   width: 100%;
   max-width: 600px;
   padding-bottom: 10px;
+  margin-bottom: 30px;
   display: grid;
   grid-template-rows: auto auto auto;
   grid-row-gap: 15px;
@@ -345,12 +348,10 @@ header {
   header {
     h1 {
       font-size: 22px;
-    }
-    h3 {
-      font-size: 16px;
+      margin: 10px;
     }
     .subtitle-text {
-      grid-template-columns: auto;
+      display: none;
     }
     margin-bottom: 10px;
   }

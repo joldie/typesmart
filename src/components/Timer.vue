@@ -142,6 +142,10 @@ button {
 @media screen and (max-width: 500px) {
   button {
     font-size: 14px;
+    padding-left: 4px;
+    padding-right: 4px;
+    width: 36px;
+    margin-right: 2px;
   }
 }
 

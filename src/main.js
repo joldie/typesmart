@@ -10,10 +10,21 @@ import {
   faPause,
   faUndo,
   faCog,
-  faTimes
+  faTimes,
+  faRandom,
+  faSearch
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-library.add(faHourglassHalf, faPlay, faPause, faUndo, faCog, faTimes);
+library.add(
+  faHourglassHalf,
+  faPlay,
+  faPause,
+  faUndo,
+  faCog,
+  faTimes,
+  faRandom,
+  faSearch
+);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 // Swimlane library for displaying scrolling text
