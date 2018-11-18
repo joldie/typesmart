@@ -299,7 +299,6 @@ export default {
     // Get random topic from example list to display on page load
     const exampleTopic =
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
-    this.$refs.searchForm.setPlaceholder('e.g. "' + exampleTopic + '"');
     this.$refs.searchForm.getNewText(exampleTopic);
     this.$refs.timer.focus();
     // Retrieve list of all of Wikipedia's ~1000 "vital articles"

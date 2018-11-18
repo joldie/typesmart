@@ -2,16 +2,6 @@
   <div class="search-wrapper">
     <!-- Override default form submit behaviour to avoid CORS issue during API call -->
     <form onSubmit="return false">
-      <p class="search-label">Search for a topic:</p>
-      <div class="wrapper-search-input">
-        <input
-        ref="input"
-        type="text"
-        required=true />
-        <button class="search-button" @click="searchClicked">
-          <font-awesome-icon icon="search"></font-awesome-icon>
-        </button>
-      </div>
       <div class="wrapper-other-buttons">
         <button class="random-button"
           @click.prevent="randomClicked"
@@ -42,69 +32,39 @@ export default {
     enableRandomButton: Boolean
   },
   methods: {
-    // API call to Wikipedia which returns a summary about the given topic
+    // API call to Wikipedia which returns a summary about a topic
     getTopicWikiSummary: async function(topicTitle) {
-      // Get random topic from list of all vital articles
-      if (topicTitle === "random") {
-        topicTitle = this.allTopics[
-          Math.floor(Math.random() * this.allTopics.length)
-        ].name;
-      }
-
-      // Get a specific topic with given title
-      const URL = this.apiUrl + "summary/" + topicTitle;
-
-      const response = await fetch(URL);
+      const response = await fetch(this.apiUrl + "summary/" + topicTitle);
       const jsonData = await response.json();
       return jsonData;
     },
     // Retrieve and check text from Wikipedia
-    getNewText: async function(searchText) {
-      if (searchText.length !== 0) {
-        // Perform API call to get summary text of topic
-        const returnObject = await this.getTopicWikiSummary(searchText);
-        // Check returned JSON object
-        if (returnObject.title === "Not found.") {
-          alert(
-            "'" +
-              searchText +
-              "' not found on Wikipedia.\nCheck your spelling or try another search term."
-          );
-        } else if (returnObject.type === "disambiguation") {
-          alert(
-            "'" +
-              searchText +
-              "' may refer to several topics.\nTry another search term or be more specific."
-          );
-        } else {
-          // If topic found, pass extract (summary) to parent for processing
-          this.$emit("save-new-text", returnObject.extract);
-          // If available, save link to thumbnail image
-          if (typeof returnObject.thumbnail != "undefined") {
-            this.$refs.thumbnail.src = returnObject.thumbnail.source;
-            this.$refs.thumbnail.alt = returnObject.title;
-          } else {
-            this.$refs.thumbnail.src = "";
-            this.$refs.thumbnail.alt = "";
-          }
-          if (searchText === "random") {
-            // Update search input placeholder with name of random topic
-            this.setPlaceholder('e.g. "' + returnObject.title + '"');
-          }
-        }
+    getNewText: async function(topicName) {
+      // If topic name not given, get random topic from list of all vital articles
+      if (topicName === "") {
+        topicName = this.allTopics[
+          Math.floor(Math.random() * this.allTopics.length)
+        ].name;
       }
-    },
-    // Search for new text based on user input
-    searchClicked: function() {
-      this.getNewText(this.$refs.input.value);
+
+      // Perform API call to get summary text of random topic
+      const returnObject = await this.getTopicWikiSummary(topicName);
+
+      // Pass extract (summary) to parent for processing
+      this.$emit("save-new-text", returnObject.extract);
+
+      // If available, save link to thumbnail image
+      if (typeof returnObject.thumbnail != "undefined") {
+        this.$refs.thumbnail.src = returnObject.thumbnail.source;
+        this.$refs.thumbnail.alt = returnObject.title;
+      } else {
+        this.$refs.thumbnail.src = "";
+        this.$refs.thumbnail.alt = "";
+      }
     },
     // Get text from a random topic
     randomClicked: function() {
-      this.getNewText("random");
-    },
-    // Set placeholder text of input field
-    setPlaceholder: function(text) {
-      this.$refs.input.placeholder = text;
+      this.getNewText("");
     }
   }
 };
