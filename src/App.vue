@@ -48,7 +48,6 @@
     <SettingsModal
       v-show="showSettings"
       @close="showSettings = false"
-      @new-language-selected="newLanguageSelected"
       @time-limit-selected="timeLimitSelected"
       @max-words-selected="maxWordsSelected" />
   </div>
@@ -277,10 +276,6 @@ export default {
     timerEnded: function() {
       this.timerRunning = false;
       alert("Time up, test finished!");
-    },
-    // Save selected language from Settings component
-    newLanguageSelected: function(URL) {
-      this.searchApiUrl = URL;
     },
     // Save selected word limit from Settings component
     maxWordsSelected: function(wordLimit) {

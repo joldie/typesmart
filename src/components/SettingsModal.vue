@@ -17,14 +17,6 @@
         <br/>
         <input type="number" name="max-words" v-model="selectedWordLimit"
           @change="maxWordsSelected" min="10" max="100" step="10">
-        <br/>
-        <label for="select-language">Text source:</label>
-        <br/>
-        <select name="select-language" v-model="selectedApiUrl" @change="languageSelected">
-          <option v-for="(lang, index) in availableLanguages" v-bind:value="lang.urlAPI" :key="index">
-          {{ lang.name }}
-          </option>
-        </select>
       </div>
     </div>
   </div>
@@ -36,31 +28,10 @@ export default {
   data: function() {
     return {
       selectedTimeLimit: 120,
-      selectedWordLimit: 30,
-      // Default API is English Wikipedia
-      selectedApiUrl: "https://en.wikipedia.org/api/rest_v1/page/",
-      // Array of available languages for search text and associated URLs of APIs
-      availableLanguages: [
-        {
-          name: "English Wikipedia",
-          urlAPI: "https://en.wikipedia.org/api/rest_v1/page/"
-        },
-        {
-          name: "Simple English Wikipedia",
-          urlAPI: "https://simple.wikipedia.org/api/rest_v1/page/"
-        },
-        {
-          name: "German Wikipedia",
-          urlAPI: "https://de.wikipedia.org/api/rest_v1/page/"
-        }
-      ]
+      selectedWordLimit: 30
     };
   },
   methods: {
-    // Pass selection to parent for action
-    languageSelected: function() {
-      this.$emit("new-language-selected", this.selectedApiUrl);
-    },
     // Pass selection to parent for action
     maxWordsSelected: function() {
       this.$emit("max-words-selected", this.selectedWordLimit);
