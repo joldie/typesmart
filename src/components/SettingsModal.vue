@@ -36,7 +36,7 @@ export default {
   data: function() {
     return {
       selectedTimeLimit: 120,
-      selectedWordLimit: 20,
+      selectedWordLimit: 30,
       // Default API is English Wikipedia
       selectedApiUrl: "https://en.wikipedia.org/api/rest_v1/page/",
       // Array of available languages for search text and associated URLs of APIs

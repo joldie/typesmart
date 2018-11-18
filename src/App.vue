@@ -106,7 +106,7 @@ export default {
       timerRunning: false,
       showSettings: false,
       searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/",
-      maxWords: 20,
+      maxWords: 30,
       timeLimit: 120,
       learnTopics: ["history", "a language", "science", "geography"],
       allTopics: []
@@ -134,6 +134,8 @@ export default {
     },
     // Format and save text from API call
     saveNewText: function(originalText) {
+      // Replace all new line characters with space
+      originalText = originalText.replace("\n", " ");
       // Split text into sentences and save in array
       const sentences = this.getAllSentences(originalText);
       // Add sentences to text until word limit has been reached.
