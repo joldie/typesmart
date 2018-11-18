@@ -7,6 +7,7 @@
 ## Medium priority
 
 - [ ] Implement autocomplete for search (to avoid landing on disambiguation pages)
+- [ ] Allow getting random topics by category (need pre-defined list of topics or possible through MediaWiki API?)
 
 ## Low priority
 

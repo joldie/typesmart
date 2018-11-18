@@ -38,15 +38,15 @@ export default {
     apiUrl: String
   },
   methods: {
-    // API call to Wikipedia which returns a JSON object about the given topic
-    callAPI: async function(searchText) {
+    // API call to Wikipedia which returns a summary about the given topic
+    getTopicWikiSummary: async function(topicTitle) {
       let URL;
-      if (searchText === "random") {
+      if (topicTitle === "random") {
         // Get random topic
         URL = this.apiUrl + "random/summary";
       } else {
-        // Get a specific topic with title = searchText
-        URL = this.apiUrl + "summary/" + searchText;
+        // Get a specific topic with given title
+        URL = this.apiUrl + "summary/" + topicTitle;
       }
       const response = await fetch(URL);
       const jsonData = await response.json();
@@ -56,7 +56,7 @@ export default {
     getNewText: async function(searchText) {
       if (searchText.length !== 0) {
         // Perform API call to get summary text of topic
-        const returnObject = await this.callAPI(searchText);
+        const returnObject = await this.getTopicWikiSummary(searchText);
         // Check returned JSON object
         if (returnObject.title === "Not found.") {
           alert(
@@ -140,8 +140,8 @@ export default {
     }
   }
   .thumbnail-wrapper {
-    width: 150px;
-    max-height: 150px;
+    width: 120px;
+    max-height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,5 +1,4 @@
 import Vue from "vue";
-import Swimlane from "vue-swimlane";
 import App from "./App.vue";
 
 // Font Awesome imports and setup
@@ -27,7 +26,8 @@ library.add(
 );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
-// Swimlane library for displaying scrolling text
+// Plugin for displaying scrolling text
+import Swimlane from "vue-swimlane";
 Vue.use(Swimlane);
 
 Vue.config.productionTip = false;

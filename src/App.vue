@@ -97,7 +97,8 @@ export default {
       searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/",
       maxWords: 20,
       timeLimit: 120,
-      learnTopics: ["history", "a language", "science", "geography"]
+      learnTopics: ["history", "a language", "science", "geography"],
+      allTopics: []
     };
   },
   computed: {
@@ -275,6 +276,12 @@ export default {
     // Save selected time limit from Settings component
     timeLimitSelected: function(timeLimit) {
       this.timeLimit = Number(timeLimit);
+    },
+    // API call to wikipedia-vital-aticles API running on local Express server
+    getAllArticles: async function() {
+      const response = await fetch("http://localhost:3000");
+      const jsonData = await response.json();
+      return jsonData;
     }
   },
   mounted: async function() {
@@ -284,6 +291,8 @@ export default {
     this.$refs.searchForm.setPlaceholder('e.g. "' + exampleTopic + '"');
     this.$refs.searchForm.getNewText(exampleTopic);
     this.$refs.timer.focus();
+    // Retrieve list of all of Wikipedia's "vital articles"
+    this.allTopics = await this.getAllArticles();
   }
 };
 </script>
