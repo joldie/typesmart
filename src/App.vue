@@ -62,17 +62,26 @@ import Timer from "./components/Timer.vue";
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
 
-// Examples for showing a random topic on page load
+// Examples for showing a topic on page load, before waiting for API call to complete
 const exampleTopics = [
-  "jaguar",
-  "rock climbing",
-  "Russian revolution",
-  "Uganda",
-  "Vue.js",
-  "David Bowie",
-  "Homage to Catalonia",
-  "jupiter",
-  "ecology"
+  "Fyodor Dostoevsky",
+  "Mahatma Gandhi",
+  "Marie Curie",
+  "Scramble for Africa",
+  "Mecca",
+  "Great Barrier Reef",
+  "Angkor Wat",
+  "Confucianism",
+  "Shia Islam",
+  "Sexual orientation",
+  "Soybean",
+  "Fascism",
+  "Women's suffrage",
+  "Mental disorder",
+  "Supernova",
+  "Eukaryote",
+  "Standard Model",
+  "Cryptography"
 ];
 
 export default {
@@ -293,7 +302,7 @@ export default {
     this.$refs.searchForm.setPlaceholder('e.g. "' + exampleTopic + '"');
     this.$refs.searchForm.getNewText(exampleTopic);
     this.$refs.timer.focus();
-    // Retrieve list of all of Wikipedia's "vital articles"
+    // Retrieve list of all of Wikipedia's ~1000 "vital articles"
     this.allTopics = await this.getAllArticles();
   }
 };
