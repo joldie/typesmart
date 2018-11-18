@@ -18,6 +18,8 @@
       <SearchForm
       ref="searchForm"
       :apiUrl=searchApiUrl
+      :allTopics=allTopics
+      :enableRandomButton="(this.allTopics.length > 0)"
       @save-new-text="saveNewText"
       @show-settings="showSettings = true" />
       <div class="timer-text-wrapper">

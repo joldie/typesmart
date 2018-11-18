@@ -13,7 +13,9 @@
         </button>
       </div>
       <div class="wrapper-other-buttons">
-        <button class="random-button" @click.prevent="randomClicked">
+        <button class="random-button"
+          @click.prevent="randomClicked"
+          :disabled=!enableRandomButton >
           <font-awesome-icon icon="random"></font-awesome-icon>
           <span class="button-text"> Random</span>
         </button>
@@ -35,19 +37,23 @@
 export default {
   name: "SearchForm",
   props: {
-    apiUrl: String
+    apiUrl: String,
+    allTopics: Array,
+    enableRandomButton: Boolean
   },
   methods: {
     // API call to Wikipedia which returns a summary about the given topic
     getTopicWikiSummary: async function(topicTitle) {
-      let URL;
+      // Get random topic from list of all vital articles
       if (topicTitle === "random") {
-        // Get random topic
-        URL = this.apiUrl + "random/summary";
-      } else {
-        // Get a specific topic with given title
-        URL = this.apiUrl + "summary/" + topicTitle;
+        topicTitle = this.allTopics[
+          Math.floor(Math.random() * this.allTopics.length)
+        ].name;
       }
+
+      // Get a specific topic with given title
+      const URL = this.apiUrl + "summary/" + topicTitle;
+
       const response = await fetch(URL);
       const jsonData = await response.json();
       return jsonData;
@@ -77,6 +83,9 @@ export default {
           if (typeof returnObject.thumbnail != "undefined") {
             this.$refs.thumbnail.src = returnObject.thumbnail.source;
             this.$refs.thumbnail.alt = returnObject.title;
+          } else {
+            this.$refs.thumbnail.src = "";
+            this.$refs.thumbnail.alt = "";
           }
           if (searchText === "random") {
             // Update search input placeholder with name of random topic
