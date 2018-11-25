@@ -1,4 +1,4 @@
-// Accurate_Interval.js
+// accurate-interval.js
 // Source: https://codepen.io/no_stack_dub_sack/pen/VKJGKd
 //
 // Thanks Squeege! For the elegant answer provided to this question:
