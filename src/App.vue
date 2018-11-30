@@ -7,49 +7,54 @@
           <p>Practice typing while learning &zwnj;</p>
           <vue-swimlane
             class="emphasised-title-text"
-            :words=learnTopics
-            :transitionDelay=3000
-            :transitionDuration=1000
-            :scale=0.62
-            :circular=true>
-          </vue-swimlane>
+            :words="learnTopics"
+            :transitionDelay="3000"
+            :transitionDuration="1000"
+            :scale="0.62"
+            :circular="true"
+          ></vue-swimlane>
         </div>
       </header>
       <SearchForm
-      ref="searchForm"
-      :apiUrl=searchApiUrl
-      :allTopics=allTopics
-      :enableRandomButton="(this.allTopics.length > 0)"
-      @save-new-text="saveNewText"
-      @show-settings="showSettings = true" />
+        ref="searchForm"
+        :apiUrl="searchApiUrl"
+        :allTopics="allTopics"
+        :enableRandomButton="(this.allTopics.length > 0)"
+        @save-new-text="saveNewText"
+        @show-settings="showSettings = true"
+      />
       <div class="timer-text-wrapper">
-        <Timer
-        ref="timer"
-        :running=timerRunning
-        :timeLimit=timeLimit
-        :speed=typingSpeed
-        @change-timer-state="changeTimerState"
-        @timer-ended="timerEnded"
-        @reset-test="resetTest"
-        @one-second-elapsed="updateTypingSpeed" />
-      <TargetText
-        :text1=completedWords
-        :text2=correctLetters
-        :text3=incorrectLetters
-        :text4=untypedLetters
-        :text5=remainingText />
-      <TypedText
-        ref="typedText"
-        :inputEnabled=timerRunning
-        v-bind:class="{ 'red-highlight': wrongInput }"
-        @key-pressed="keyPressed" />
+        <TestControl
+          ref="timer"
+          :running="timerRunning"
+          :timeLimit="timeLimit"
+          :speed="typingSpeed"
+          @change-timer-state="changeTimerState"
+          @timer-ended="timerEnded"
+          @reset-test="resetTest"
+          @one-second-elapsed="updateTypingSpeed"
+        />
+        <TargetText
+          :text1="completedWords"
+          :text2="correctLetters"
+          :text3="incorrectLetters"
+          :text4="untypedLetters"
+          :text5="remainingText"
+        />
+        <TypedText
+          ref="typedText"
+          :inputEnabled="timerRunning"
+          v-bind:class="{ 'red-highlight': wrongInput }"
+          @key-pressed="keyPressed"
+        />
       </div>
     </div>
     <SettingsModal
       v-show="showSettings"
       @close="showSettings = false"
       @time-limit-selected="timeLimitSelected"
-      @max-words-selected="maxWordsSelected" />
+      @max-words-selected="maxWordsSelected"
+    />
   </div>
 </template>
 
@@ -57,7 +62,7 @@
 // Custom components
 import SearchForm from "./components/SearchForm.vue";
 import SettingsModal from "./components/SettingsModal.vue";
-import Timer from "./components/Timer.vue";
+import TestControl from "./components/TestControl.vue";
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
 
@@ -88,7 +93,7 @@ export default {
   components: {
     SearchForm,
     SettingsModal,
-    Timer,
+    TestControl,
     TargetText,
     TypedText
   },
