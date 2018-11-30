@@ -97,7 +97,6 @@ export default {
   border-radius: 50%;
   display: flex;
   justify-content: center;
-  //box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
 }
 .speed-text {
   position: relative;

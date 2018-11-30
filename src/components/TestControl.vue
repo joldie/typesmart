@@ -1,5 +1,5 @@
 <template>
-  <div class="timer-wrapper">
+  <div class="test-control-wrapper">
     <div class="timer-button-wrapper">
       <button ref="startStopButton" @click="startStop">
         <font-awesome-icon :icon="running ? 'pause' : 'play'"></font-awesome-icon>
@@ -9,16 +9,14 @@
       </button>
     </div>
     <SpeedDisplay :speed="speed"/>
-    <span class="time-display" v-bind:class="{ 'red-highlight': running && secondsLeft <= 10 }">
-      <font-awesome-icon icon="hourglass-half"></font-awesome-icon>
-      {{timeLeft}}
-    </span>
+    <TimerDisplay :running="running" :secondsLeft="secondsLeft"/>
   </div>
 </template>
 
 <script>
 // Custom components
 import SpeedDisplay from "./SpeedDisplay.vue";
+import TimerDisplay from "./TimerDisplay.vue";
 
 // Improves on setTimeout() function which is known to drift over time
 const accurateInterval = require("../../modules/accurate-interval.js");
@@ -26,7 +24,8 @@ const accurateInterval = require("../../modules/accurate-interval.js");
 export default {
   name: "TestControl",
   components: {
-    SpeedDisplay
+    SpeedDisplay,
+    TimerDisplay
   },
   props: {
     running: Boolean,
@@ -106,7 +105,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.timer-wrapper {
+.test-control-wrapper {
   width: 100%;
   font-size: 16px;
   display: grid;
@@ -116,17 +115,10 @@ export default {
   align-self: flex-end;
   justify-self: left;
 }
-.time-display {
-  align-self: flex-end;
-  justify-self: right;
-}
 button {
   height: 32px;
   font-size: 16px;
   margin-right: 5px;
-}
-.red-highlight {
-  color: red;
 }
 @media screen and (max-width: 500px) {
   button {
