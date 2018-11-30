@@ -9,14 +9,12 @@
       </button>
     </div>
     <SpeedDisplay :speed="speed"/>
-    <TimerDisplay :running="running" :secondsLeft="secondsLeft"/>
   </div>
 </template>
 
 <script>
 // Custom components
 import SpeedDisplay from "./SpeedDisplay.vue";
-import TimerDisplay from "./TimerDisplay.vue";
 
 // Improves on setTimeout() function which is known to drift over time
 const accurateInterval = require("../../modules/accurate-interval.js");
@@ -24,8 +22,7 @@ const accurateInterval = require("../../modules/accurate-interval.js");
 export default {
   name: "TestControl",
   components: {
-    SpeedDisplay,
-    TimerDisplay
+    SpeedDisplay
   },
   props: {
     running: Boolean,

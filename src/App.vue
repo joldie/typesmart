@@ -25,14 +25,14 @@
       />
       <div class="timer-text-wrapper">
         <TestControl
-          ref="timer"
+          ref="testControl"
           :running="timerRunning"
           :timeLimit="timeLimit"
           :speed="typingSpeed"
           @change-timer-state="changeTimerState"
           @timer-ended="timerEnded"
           @reset-test="resetTest"
-          @one-second-elapsed="updateTypingSpeed"
+          @one-second-elapsed="updateTime"
         />
         <TargetText
           :text1="completedWords"
@@ -47,6 +47,7 @@
           v-bind:class="{ 'red-highlight': wrongInput }"
           @key-pressed="keyPressed"
         />
+        <TimerDisplay :running="timerRunning" :secondsLeft="timerSecondsLeft"/>
       </div>
     </div>
     <SettingsModal
@@ -65,6 +66,7 @@ import SettingsModal from "./components/SettingsModal.vue";
 import TestControl from "./components/TestControl.vue";
 import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
+import TimerDisplay from "./components/TimerDisplay.vue";
 
 // Examples for showing a topic on page load, before waiting for API call to complete
 const exampleTopics = [
@@ -95,7 +97,8 @@ export default {
     SettingsModal,
     TestControl,
     TargetText,
-    TypedText
+    TypedText,
+    TimerDisplay
   },
   data: function() {
     return {
@@ -108,6 +111,7 @@ export default {
       nextWord: "",
       typingSpeed: 0,
       timerRunning: false,
+      timerSecondsLeft: 120,
       showSettings: false,
       searchApiUrl: "https://en.wikipedia.org/api/rest_v1/page/",
       maxWords: 30,
@@ -155,7 +159,7 @@ export default {
       this.targetText = text.trim();
       this.getNextWord();
       // Set focus to start/stop button for quick test start
-      this.$refs.timer.focus();
+      this.$refs.testControl.focus();
     },
     // Returns array containing all sentences in a given text
     getAllSentences: function(text) {
@@ -202,7 +206,7 @@ export default {
         if (this.remainingText.length === 0) {
           this.correctLetters = "";
           this.untypedLetters = "";
-          this.$refs.timer.startStop();
+          this.$refs.testControl.startStop();
           alert("Done!");
         } else {
           this.getNextWord();
@@ -241,7 +245,10 @@ export default {
         }
       }
     },
-    updateTypingSpeed: function(secondsElapsed) {
+    updateTime: function(secondsElapsed) {
+      // Update timer remaining, then update current speed value
+      this.timerSecondsLeft--;
+
       /*  Formula for calculating words per minute, WPM:
             Gross WPM = (All typed entries / 5) / Time in minutes
           i.e. a "word" is considered to be any 5 characters to account for
@@ -263,9 +270,10 @@ export default {
     // Reset test fields
     resetTest: function() {
       this.timerRunning = false;
+      this.timerSecondsLeft = this.timeLimit;
       this.saveNewText(this.targetText);
       this.typingSpeed = 0;
-      this.$refs.timer.focus();
+      this.$refs.testControl.focus();
     },
     // Update timer state
     changeTimerState: function(bool) {
@@ -302,7 +310,7 @@ export default {
     const exampleTopic =
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
     this.$refs.searchForm.getNewText(exampleTopic);
-    this.$refs.timer.focus();
+    this.$refs.testControl.focus();
     // Retrieve list of all of Wikipedia's ~1000 "vital articles"
     this.allTopics = await this.getAllArticles();
   }
