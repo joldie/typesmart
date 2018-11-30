@@ -1,9 +1,10 @@
 <template>
   <div class="timer-display-wrapper">
-    <span class="time-display" v-bind:class="{ 'red-highlight': running && secondsLeft <= 10 }">
-      <font-awesome-icon icon="hourglass-half"></font-awesome-icon>
-      {{timeLeft}}
-    </span>
+    <div
+      class="timer-bar"
+      :style="timerWidthStyle"
+      v-bind:class="{ 'red-highlight': running && secondsLeft <= 10 }"
+    ></div>
   </div>
 </template>
 
@@ -12,31 +13,30 @@ export default {
   name: "TimerDisplay",
   props: {
     running: Boolean,
-    secondsLeft: Number
+    secondsLeft: Number,
+    timeLimit: Number
   },
   computed: {
-    // Format number of seconds into minutes:seconds (e.g. 90s -> "01:30")
-    timeLeft: function() {
-      let minutes = Math.floor(this.secondsLeft / 60);
-      let seconds = this.secondsLeft % 60;
-      if (seconds < 10) {
-        seconds = "0" + seconds;
-      }
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      return minutes + ":" + seconds;
+    timerWidthStyle() {
+      return `width: ${(this.secondsLeft / this.timeLimit) * 100}%; !important`;
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
-.time-display {
-  align-self: flex-end;
-  justify-self: right;
+.timer-display-wrapper {
+  width: 100%;
+  height: 9px;
+  border: 1px solid rgb(184, 184, 184);
+  border-radius: 3px;
+  padding: 1px;
+  .timer-bar {
+    height: 100%;
+    background-color: rgb(0, 162, 255);
+  }
 }
 .red-highlight {
-  color: red;
+  background-color: rgb(255, 30, 0) !important;
 }
 </style>

@@ -47,7 +47,11 @@
           v-bind:class="{ 'red-highlight': wrongInput }"
           @key-pressed="keyPressed"
         />
-        <TimerDisplay :running="timerRunning" :secondsLeft="timerSecondsLeft"/>
+        <TimerDisplay
+          :running="timerRunning"
+          :secondsLeft="timerSecondsLeft"
+          :timeLimit="timeLimit"
+        />
       </div>
     </div>
     <SettingsModal
