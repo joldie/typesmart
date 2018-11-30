@@ -19,7 +19,8 @@
     "npm": "^6.4.1",
     "vue": "^2.5.17",
     "vue-swimlane": "^0.3.8",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "wiki-vital-articles": "^0.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",
