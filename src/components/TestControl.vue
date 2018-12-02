@@ -1,6 +1,6 @@
 <template>
   <div class="test-control-wrapper">
-    <div class="timer-button-wrapper">
+    <div class="control-buttons-wrapper">
       <button ref="startStopButton" @click="startStop">
         <font-awesome-icon :icon="running ? 'pause' : 'play'"></font-awesome-icon>
       </button>
@@ -9,6 +9,14 @@
       </button>
     </div>
     <SpeedDisplay :speed="speed"/>
+    <div class="settings-buttons-wrapper">
+      <button class="random-button" @click="randomClicked" :disabled="!enableRandomButton">
+        <font-awesome-icon icon="random"></font-awesome-icon>
+      </button>
+      <button class="show-settings-button" @click="$emit('show-settings')">
+        <font-awesome-icon icon="cog"></font-awesome-icon>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -27,7 +35,10 @@ export default {
   props: {
     running: Boolean,
     timeLimit: Number,
-    speed: Number
+    speed: Number,
+    apiUrl: String,
+    allTopics: Array,
+    enableRandomButton: Boolean
   },
   data: function() {
     return {
@@ -88,6 +99,42 @@ export default {
     // Set window focus to start button for quick start
     focus: function() {
       this.$refs.startStopButton.focus();
+    },
+    // API call to Wikipedia which returns a summary about a topic
+    getTopicWikiSummary: async function(topicTitle) {
+      const response = await fetch(this.apiUrl + "summary/" + topicTitle);
+      const jsonData = await response.json();
+      return jsonData;
+    },
+    // Retrieve and check text from Wikipedia
+    getNewText: async function(topicName) {
+      // If topic name not given, get random topic from list of all vital articles
+      if (topicName === "") {
+        topicName = this.allTopics[
+          Math.floor(Math.random() * this.allTopics.length)
+        ].name;
+      }
+
+      // Perform API call to get summary text of random topic
+      const returnObject = await this.getTopicWikiSummary(topicName);
+
+      // Pass extract (summary) to parent for processing
+      this.$emit("save-new-text", returnObject.extract);
+
+      // If available, pass thumbnail image data to parent for processing
+      if (typeof returnObject.thumbnail != "undefined") {
+        this.$emit(
+          "save-new-thumbnail",
+          returnObject.thumbnail.source,
+          returnObject.title
+        );
+      } else {
+        this.$emit("save-new-thumbnail", "", "");
+      }
+    },
+    // Get text from a random topic
+    randomClicked: function() {
+      this.getNewText("");
     }
   },
   mounted: function() {
@@ -107,15 +154,19 @@ export default {
   font-size: 16px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-}
-.timer-button-wrapper {
-  align-self: flex-end;
-  justify-self: left;
-}
-button {
-  height: 32px;
-  font-size: 16px;
-  margin-right: 5px;
+  button {
+    height: 32px;
+    font-size: 16px;
+    margin-right: 5px;
+  }
+  .control-buttons-wrapper {
+    align-self: flex-end;
+    justify-self: left;
+  }
+  .settings-buttons-wrapper {
+    align-self: flex-end;
+    justify-self: right;
+  }
 }
 @media screen and (max-width: 500px) {
   button {

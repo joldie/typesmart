@@ -15,26 +15,25 @@
           ></vue-swimlane>
         </div>
       </header>
-      <SearchForm
-        ref="searchForm"
-        :apiUrl="searchApiUrl"
-        :allTopics="allTopics"
-        :enableRandomButton="(this.allTopics.length > 0)"
-        @save-new-text="saveNewText"
-        @show-settings="showSettings = true"
-      />
       <div class="timer-text-wrapper">
         <TestControl
           ref="testControl"
           :running="timerRunning"
           :timeLimit="timeLimit"
           :speed="typingSpeed"
+          :apiUrl="searchApiUrl"
+          :allTopics="allTopics"
+          :enableRandomButton="(this.allTopics.length > 0)"
           @change-timer-state="changeTimerState"
           @timer-ended="timerEnded"
           @reset-test="resetTest"
           @one-second-elapsed="updateTime"
+          @save-new-text="saveNewText"
+          @save-new-thumbnail="saveNewThumbnail"
+          @show-settings="showSettings = true"
         />
         <TargetText
+          ref="targetText"
           :text1="completedWords"
           :text2="correctLetters"
           :text3="incorrectLetters"
@@ -65,7 +64,6 @@
 
 <script>
 // Custom components
-import SearchForm from "./components/SearchForm.vue";
 import SettingsModal from "./components/SettingsModal.vue";
 import TestControl from "./components/TestControl.vue";
 import TargetText from "./components/TargetText.vue";
@@ -97,7 +95,6 @@ const exampleTopics = [
 export default {
   name: "app",
   components: {
-    SearchForm,
     SettingsModal,
     TestControl,
     TargetText,
@@ -307,13 +304,17 @@ export default {
       const response = await fetch("http://localhost:3000");
       const jsonData = await response.json();
       return jsonData;
+    },
+    // Save thumbnail image from new topic
+    saveNewThumbnail: function(url, altText) {
+      this.$refs.targetText.saveNewThumbnail(url, altText);
     }
   },
   mounted: async function() {
     // Get random topic from example list to display on page load
     const exampleTopic =
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
-    this.$refs.searchForm.getNewText(exampleTopic);
+    this.$refs.testControl.getNewText(exampleTopic);
     this.$refs.testControl.focus();
     // Retrieve list of all of Wikipedia's ~1000 "vital articles"
     this.allTopics = await this.getAllArticles();
