@@ -10,7 +10,12 @@
     </div>
     <SpeedDisplay :speed="speed"/>
     <div class="settings-buttons-wrapper">
-      <button class="random-button" @click="randomClicked" :disabled="!enableRandomButton">
+      <button
+        ref="randomButton"
+        class="random-button"
+        @click="randomClicked"
+        :disabled="!enableRandomButton"
+      >
         <font-awesome-icon icon="random"></font-awesome-icon>
       </button>
       <button class="show-settings-button" @click="$emit('show-settings')">
@@ -97,8 +102,12 @@ export default {
       this.$emit("reset-test");
     },
     // Set window focus to start button for quick start
-    focus: function() {
+    focusStartStop: function() {
       this.$refs.startStopButton.focus();
+    },
+    // Set window focus to next topic button
+    focusNext: function() {
+      this.$refs.randomButton.focus();
     },
     // API call to Wikipedia which returns a summary about a topic
     getTopicWikiSummary: async function(topicTitle) {
@@ -134,6 +143,7 @@ export default {
     },
     // Get text from a random topic
     randomClicked: function() {
+      this.reset();
       this.getNewText("");
     }
   },

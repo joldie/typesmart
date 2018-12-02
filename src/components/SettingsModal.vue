@@ -9,14 +9,28 @@
       </div>
       <div class="options-wrapper">
         <label for="time-limit">Time limit (seconds):</label>
-        <br/>
-        <input type="number" name="time-limit" v-model="selectedTimeLimit"
-          @change="timeLimitSelected" min="30" max="600" step="10">
-        <br/>
+        <br>
+        <input
+          type="number"
+          name="time-limit"
+          v-model="selectedTimeLimit"
+          @change="timeLimitSelected"
+          min="30"
+          max="600"
+          step="10"
+        >
+        <br>
         <label for="max-words">Text word limit:</label>
-        <br/>
-        <input type="number" name="max-words" v-model="selectedWordLimit"
-          @change="maxWordsSelected" min="10" max="100" step="10">
+        <br>
+        <input
+          type="number"
+          name="max-words"
+          v-model="selectedWordLimit"
+          @change="maxWordsSelected"
+          min="10"
+          max="100"
+          step="10"
+        >
       </div>
     </div>
   </div>

@@ -55,7 +55,7 @@
     </div>
     <SettingsModal
       v-show="showSettings"
-      @close="showSettings = false"
+      @close="closeSettings"
       @time-limit-selected="timeLimitSelected"
       @max-words-selected="maxWordsSelected"
     />
@@ -81,7 +81,6 @@ const exampleTopics = [
   "Angkor Wat",
   "Confucianism",
   "Shia Islam",
-  "Sexual orientation",
   "Soybean",
   "Fascism",
   "Women's suffrage",
@@ -160,7 +159,7 @@ export default {
       this.targetText = text.trim();
       this.getNextWord();
       // Set focus to start/stop button for quick test start
-      this.$refs.testControl.focus();
+      this.$refs.testControl.focusStartStop();
     },
     // Returns array containing all sentences in a given text
     getAllSentences: function(text) {
@@ -209,6 +208,7 @@ export default {
           this.untypedLetters = "";
           this.$refs.testControl.startStop();
           alert("Done!");
+          this.$refs.testControl.focusNext();
         } else {
           this.getNextWord();
         }
@@ -274,7 +274,7 @@ export default {
       this.timerSecondsLeft = this.timeLimit;
       this.saveNewText(this.targetText);
       this.typingSpeed = 0;
-      this.$refs.testControl.focus();
+      this.$refs.testControl.focusStartStop();
     },
     // Update timer state
     changeTimerState: function(bool) {
@@ -290,6 +290,7 @@ export default {
     timerEnded: function() {
       this.timerRunning = false;
       alert("Time up, test finished!");
+      this.$refs.testControl.focusNext();
     },
     // Save selected word limit from Settings component
     maxWordsSelected: function(wordLimit) {
@@ -308,6 +309,12 @@ export default {
     // Save thumbnail image from new topic
     saveNewThumbnail: function(url, altText) {
       this.$refs.targetText.saveNewThumbnail(url, altText);
+    },
+    // Hide settings modal, apply new settings by resetting test
+    closeSettings: function() {
+      this.showSettings = false;
+      this.resetTest();
+      this.$refs.testControl.focusStartStop();
     }
   },
   mounted: async function() {
@@ -315,7 +322,7 @@ export default {
     const exampleTopic =
       exampleTopics[Math.floor(Math.random() * exampleTopics.length)];
     this.$refs.testControl.getNewText(exampleTopic);
-    this.$refs.testControl.focus();
+    this.$refs.testControl.focusStartStop();
     // Retrieve list of all of Wikipedia's ~1000 "vital articles"
     this.allTopics = await this.getAllArticles();
   }
