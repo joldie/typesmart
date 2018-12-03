@@ -70,6 +70,9 @@ import TargetText from "./components/TargetText.vue";
 import TypedText from "./components/TypedText.vue";
 import TimerDisplay from "./components/TimerDisplay.vue";
 
+// Module for transliterating non-English characters into US-ASCII
+const unidecode = require("unidecode");
+
 // Examples for showing a topic on page load, before waiting for API call to complete
 const exampleTopics = [
   "Fyodor Dostoevsky",
@@ -144,6 +147,8 @@ export default {
     saveNewText: function(originalText) {
       // Replace all new line characters with space
       originalText = originalText.replace("\n", " ");
+      // Replace all non-English characters with US-ASCII
+      originalText = unidecode(originalText);
       // Split text into sentences and save in array
       const sentences = this.getAllSentences(originalText);
       // Add sentences to text until word limit has been reached.

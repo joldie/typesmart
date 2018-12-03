@@ -6,14 +6,14 @@
 
 ## Medium priority
 
-- [ ] Implement autocomplete for search (to avoid landing on disambiguation pages)
-- [ ] Allow getting random topics by category (need pre-defined list of topics or possible through MediaWiki API?)
+- [ ] Enable fetching of text from other language Wikipedias
+- [ ] Write unit tests
 
 ## Low priority
 
 - [ ] Enable fetching text from other MediaWiki sites, e.g. WikiQuote
 - [ ] User login, save results, post results to social media, etc
 - [ ] Compete against other users / fixed speed / your old scores
-- [ ] Show race car (or similar) along track as visual cue for speed / timer countdown
-- [ ] Remove special characters from text
-- [ ] Allow "ss" for ß, "ae" for ä, etc
+- [ ] Include option to allow specific non-English characters (accents, etc) found on a user's keyboard
+- [ ] Allow more correct transliterations of characters (e.g. "ss" for ß, "ae" for ä )
+- [ ] Improve commenting, especially of functions (JSDoc style)

@@ -17,6 +17,7 @@
     "jsdom": "^13.0.0",
     "node-fetch": "^2.3.0",
     "npm": "^6.4.1",
+    "unidecode": "^0.1.8",
     "vue": "^2.5.17",
     "vue-swimlane": "^0.3.8",
     "webpack-node-externals": "^1.7.2",
